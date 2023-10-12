@@ -1,0 +1,64 @@
+<tool id="osmere_ogc_process" name="OSMERE process" version="0.1.0">
+    <description> computes a route from waypoints based on an OSM roads network.</description>
+    <stdio>
+        <exit_code range="1:" />
+    </stdio>
+    <requirements>
+        <requirement type="package" version="4.1.2">R</requirement>
+        <requirement type="package" version="0.2.3">httr2</requirement>
+        <requirement type="package" version="1.2.0">getopt</requirement>
+        <requirement type="package" version="1.8.7">jsonlite</requirement>
+    </requirements>
+    <command><![CDATA[
+        Rscript /home/markus/Documents/aquainfra/galaxy/tools/ogc_services/osmere_ogc_process.R --dataset $dataset --preference $preference --mode $mode --startingPointLon $startingPointLon --startingPointLat $startingPointLat --endPointLon $endPointLon --endPointLat $endPointLat --output $galaxy_output
+    ]]></command>
+    <inputs>
+        <param name="dataset" type="select" label="Dataset">
+            <option value="southCalifornia" selected="True">South California</option>
+            <option value="ottawa">Ottawa</option>
+            <option value="quebec">Quebec</option>
+            <option value="northCarolina">North Carolina</option>
+            <option value="dc">DC</option>
+            <option value="singapore">Singapore</option>
+            <option value="kyushu">Kyushu</option>
+            <option value="kanto">Kanto</option>
+            <option value="kansai">Kansai</option>
+        </param>
+        <param name="preference" type="select" label="Preference">
+            <option value="fastest">Fastest</option>
+            <option value="shortest">shortest</option>
+            <option value="efficient">efficient</option>
+        </param>
+        <param name="mode" type="select" label="Mode">
+            <option value="motor">Motor</option>
+            <option value="cycling">Cycling</option>
+            <option value="pedestrian">Pedestrian</option>
+        </param>
+        <param value="0" type="float" name="startingPointLon" label="startingPointLon" />
+        <param value="0" type="float" name="startingPointLat" label="startingPointLat" />
+        <param value="0" type="float" name="endPointLon" label="endPointLon" />
+        <param value="0" type="float" name="endPointLat" label="endPointLat" />
+    </inputs>
+    <outputs>
+        <data name="galaxy_output" format="geojson" />
+    </outputs>
+    <tests>
+        <test>
+            <!--<output name="galaxy_output" file="/galaxy/tools/mytools/test_data/test_output.txt"/>-->
+        </test>
+    </tests>
+    <help><![CDATA[
+        Routes can be calculated for coordinates withing the boundaries of the provided datasets.
+    ]]></help>
+    <citations>
+        <citation type="bibtex">
+            @Manual{,
+                title = {httr2: Perform HTTP Requests and Process the Responses},
+                author = {Hadley Wickham},
+                year = {2023},
+                note = {R package version 0.2.3},
+                url = {https://CRAN.R-project.org/package=httr2},
+            }
+        </citation>
+    </citations>
+</tool>
