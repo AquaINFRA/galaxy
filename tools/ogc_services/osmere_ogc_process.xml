@@ -34,10 +34,10 @@
             <option value="cycling">Cycling</option>
             <option value="pedestrian">Pedestrian</option>
         </param>
-        <param value="0" type="float" name="startingPointLon" label="startingPointLon" />
-        <param value="0" type="float" name="startingPointLat" label="startingPointLat" />
-        <param value="0" type="float" name="endPointLon" label="endPointLon" />
-        <param value="0" type="float" name="endPointLat" label="endPointLat" />
+        <param value="-115.69803200929768" type="float" name="startingPointLon" label="startingPointLon" />
+        <param value="32.69667969617757" type="float" name="startingPointLat" label="startingPointLat" />
+        <param value="-119.1625288599581" type="float" name="endPointLon" label="endPointLon" />
+        <param value="35.485478540555256" type="float" name="endPointLat" label="endPointLat" />
     </inputs>
     <outputs>
         <data name="galaxy_output" format="geojson" />
