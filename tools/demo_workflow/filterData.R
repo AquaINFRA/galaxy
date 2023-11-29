@@ -12,7 +12,7 @@ option_specification = matrix(c(
 ), byrow=TRUE, ncol=4);
 options = getopt(option_specification);
 
-temperature_values <- read.csv(file=options$inputData, sep = ';', header = TRUE)
+temperature_values <- read.csv(file=options$inputData, sep = ',', header = TRUE)
 
 if ( options$checked ) {
   temperature_values <- dplyr::filter(temperature_values, temperature_values$quality_level == "checked")
@@ -24,4 +24,4 @@ cat("\n accuracy: ", options$accuracy)
 cat("\n outputData: ", options$outputData)
   
 temperature_values <- dplyr::filter(temperature_values, temperature_values$accuracy < options$accuracy)
-write.csv(temperature_values, options$outputData, quote = FALSE)
+write.table(temperature_values, options$outputData, quote = FALSE, sep = ",", row.names=FALSE)
