@@ -1,0 +1,53 @@
+<tool id="filterData" name="Filter dataset" version="0.1.0">
+    <description> creates a subset of the data based on the parameters "quality level" and "accuracy".</description>
+    <stdio>
+        <exit_code range="1:" />
+    </stdio>
+    <requirements>
+        <requirement type="package" version="4.1.2">R</requirement>
+        <requirement type="package" version="1.2.0">getopt</requirement>
+        <requirement type="package" version="1.1.2">dplyr</requirement>
+    </requirements>
+    <command><![CDATA[
+        Rscript $__tool_directory__/filterData.R --inputData $inputFile --checked $checked --accuracy $accuracy --outputData $output
+    ]]></command>
+    <inputs>
+        <param type="data" format="csv" name="inputFile" label="Observations as csv"/>
+        <param type="select" name="checked" label="Show only quality checked observations?">
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+        </param>
+        <param value="0.2" type="float" name="accuracy" label="Show only observations with an accuracy smaller than..." />
+    </inputs>
+    <outputs>
+        <data name="output" format="csv" />
+    </outputs>
+    <tests>
+        <test>
+            <!--<output name="galaxy_output" file="/galaxy/tools/mytools/test_data/test_output.txt"/>-->
+        </test>
+    </tests>
+    <help><![CDATA[
+        Routes can be calculated for coordinates withing the boundaries of the provided datasets.
+    ]]></help>
+    <citations>
+        <citation type="bibtex">
+            @Manual{dplyr,
+                title = {dplyr: A Grammar of Data Manipulation},
+                author = {Hadley Wickham and Romain François and Lionel Henry and Kirill Müller and Davis Vaughan},
+                year = {2023},
+                note = {R package version 1.1.2},
+                url = {https://CRAN.R-project.org/package=dplyr},
+            }
+        </citation>
+        <citation type="bibtex">
+            @Manual{getopt,
+                title = {getopt: C-Like 'getopt' Behavior},
+                author = {Trevor L Davis and Allen Day},
+                year = {2019},
+                note = {R package version 1.20.3},
+                url = {https://CRAN.R-project.org/package=getopt},
+            }
+        </citation>
+    </citations>
+</tool>
