@@ -7,7 +7,8 @@ args = commandArgs(trailingOnly=TRUE)
 option_specification = matrix(c(
   'inputData', 'i1', 1, 'character',
   'checked', 'i2', 1, 'character',
-  'accuracy', 'i3', 1, 'double',
+  'processing', 'i3', 1, 'character',
+  'accuracy', 'i4', 1, 'double',
   'outputData', 'o', 2, 'character'
 ), byrow=TRUE, ncol=4);
 options = getopt(option_specification);
@@ -16,6 +17,10 @@ temperature_values <- read.csv(file=options$inputData, sep = ',', header = TRUE)
 
 if ( options$checked ) {
   temperature_values <- dplyr::filter(temperature_values, temperature_values$quality_level == "checked")
+}
+
+if (options$processing == "raw") {
+  temperature_values <- dplyr::filter(temperature_values, temperature_values$data_processing == "raw")
 }
 
 cat("\n inputData", options$inputData)

@@ -9,13 +9,18 @@
         <requirement type="package" version="1.1.2">dplyr</requirement>
     </requirements>
     <command><![CDATA[
-        Rscript $__tool_directory__/filterData.R --inputData $inputFile --checked $checked --accuracy $accuracy --outputData $output
+        Rscript $__tool_directory__/filterData.R --inputData $inputFile --checked $checked --accuracy $accuracy --processing $processing --outputData $output
     ]]></command>
     <inputs>
         <param type="data" format="csv" name="inputFile" label="Observations as csv"/>
         <param type="select" name="checked" label="Show only quality checked observations?">
-            <option value="true">Yes</option>
             <option value="false">No</option>
+            <option value="true">Yes</option>
+        </param>
+        <param type="select" name="processing" label="Which processing stage should be included?">
+            <option value="both">Adjusted and raw</option>
+            <option value="adjusted">Adjusted</option>
+            <option value="raw">Raw</option>
         </param>
         <param value="0.2" type="float" name="accuracy" label="Show only observations with an accuracy smaller than..." />
     </inputs>
