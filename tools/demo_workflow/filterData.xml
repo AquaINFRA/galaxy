@@ -1,13 +1,13 @@
 <tool id="filterData" name="Filter dataset" version="0.1.0">
     <description> creates a subset of the data based on the parameters "quality level" and "accuracy".</description>
-    <stdio>
-        <exit_code range="1:" />
-    </stdio>
     <requirements>
         <requirement type="package" version="4.1.2">R</requirement>
         <requirement type="package" version="1.2.0">getopt</requirement>
         <requirement type="package" version="1.1.2">dplyr</requirement>
     </requirements>
+    <stdio>
+        <exit_code range="1:" />
+    </stdio>
     <command><![CDATA[
         Rscript $__tool_directory__/filterData.R --inputData $inputFile --checked $checked --accuracy $accuracy --processing $processing --outputData $output
     ]]></command>
@@ -22,7 +22,7 @@
             <option value="adjusted">Adjusted</option>
             <option value="raw">Raw</option>
         </param>
-        <param value="0.2" type="float" name="accuracy" label="Show only observations with an accuracy smaller than..." />
+        <param value="0.21" min="0.00" max="0.51" type="float" name="accuracy" label="Show only observations with an accuracy smaller than..."/>
     </inputs>
     <outputs>
         <data name="output" format="csv" />
@@ -31,7 +31,7 @@
         <test>
             <param name="inputFile" value="filterData_testdata_input.csv"/>
             <param name="checked" value="true"/>
-            <param name="processing" value="raw"/>
+            <param name="processing" value="adjusted"/>
             <param name="accuracy" value="0.1"/>
             <output name="output" file="filterData_testdata_output.csv" />
         </test>
