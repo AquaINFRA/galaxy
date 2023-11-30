@@ -1,5 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
 <toolbox monitor="true">
+  <section id="demo_workflow" name="Demo Workflow">
+    <tool file="demo_workflow/filterData.xml"></tool> 
+  </section>
   <section id="getext" name="Get Data">
     <tool file="data_source/upload.xml" />
     <tool file="data_source/ucsc_tablebrowser.xml" />
@@ -119,6 +122,7 @@
   <section id="plots" name="Graph/Display Data">
     <tool file="maf/vcf_to_maf_customtrack.xml" />
   </section>
+  <!--
   <section id="hgv" name="Phenotype Association">
     <tool file="phenotype_association/sift.xml" />
     <tool file="phenotype_association/linkToGProfile.xml" />
@@ -126,6 +130,7 @@
     <tool file="phenotype_association/ldtools.xml" />
     <tool file="phenotype_association/master2pg.xml" />
   </section>
+  -->
   <!--
   <section id="interactivetools" name="Interactive tools">
     <tool file="interactive/interactivetool_askomics.xml" />

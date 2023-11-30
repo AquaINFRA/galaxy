@@ -29,7 +29,11 @@
     </outputs>
     <tests>
         <test>
-            <!--<output name="galaxy_output" file="/galaxy/tools/mytools/test_data/test_output.txt"/>-->
+            <param name="inputFile" value="filterData_testdata_input.csv"/>
+            <param name="checked" value="true"/>
+            <param name="processing" value="raw"/>
+            <param name="accuracy" value="0.1"/>
+            <output name="output" file="filterData_testdata_output.csv" />
         </test>
     </tests>
     <help><![CDATA[
