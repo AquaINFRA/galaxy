@@ -1,0 +1,34 @@
+<tool id="filter_species_data" name="Filter species data" version="0.1.0">
+    <description>Filter species occurrence coordinates using a drainage basin.</description>
+    <stdio>
+        <exit_code range="1:" />
+    </stdio>
+    <requirements>
+        <requirement type="package">geojson</requirement>
+        <requirement type="package">requests</requirement>
+    </requirements>
+    <command><![CDATA[
+        python $__tool_directory__/wrap_filter_species_data.py --input "$species_occurrence_json_infile" --basin_id "$basin_id" --output $species_occurrence_json_outfile
+    ]]></command>
+    <inputs>
+        <!--param name="ogc_service_url" type="text" label="OGC API: Which URL to request, including port." value="http://localhost:5000"></param-->
+        <param type="data" name="species_occurrence_json_infile" label="Species occurrence coordinates" format="geojson" />
+        <param name="basin_id" type="select" label="Which basin...">
+            <option value="481051">Basin Sao Francisco</option>
+            <option value="Other">No other basin right now</option>
+        </param>
+    </inputs>
+    <outputs>
+        <data name="species_occurrence_json_outfile" label="Filtered species occurrence coordinates" format="geojson" />
+    </outputs>
+    <tests>
+        <test>
+            <!--<output name="galaxy_output" file="/galaxy/tools/mytools/test_data/test_output.txt"/>-->
+        </test>
+    </tests>
+    <help><![CDATA[
+        Return only the point coordinates located in the selected river basin (filtering done using sf package).
+    ]]></help>
+    <citations>
+    </citations>
+</tool>

@@ -1,0 +1,34 @@
+<tool id="get_drainage_basin" name="Get drainage basin" version="0.1.0">
+    <description>Get drainage basin as polygon by id.</description>
+    <stdio>
+        <exit_code range="1:" />
+    </stdio>
+    <requirements>
+        <requirement type="package">geojson</requirement>
+        <requirement type="package">requests</requirement>
+    </requirements>
+    <command><![CDATA[
+        python $__tool_directory__/wrap_get_drainage_basin.py --input "$species_occurrence_json_infile" --basin_id "$basin_id" --output $species_occurrence_json_outfile
+    ]]></command>
+    <inputs>
+        <param name="basin_id" type="select" label="Which basin...">
+            <option value="481051">Basin Sao Francisco</option>
+            <option value="481052">Basin Piritu</option>
+            <option value="481053">Basin Sao Xavier</option>
+            <option value="Other">No other basin right now</option>
+        </param>
+    </inputs>
+    <outputs>
+        <data name="drainage_basin" label="Drainage basin polygon" format="geojson" />
+    </outputs>
+    <tests>
+        <test>
+            <!--<output name="galaxy_output" file="/galaxy/tools/mytools/test_data/test_output.txt"/>-->
+        </test>
+    </tests>
+    <help><![CDATA[
+        Return only the point coordinates located in the selected river basin (filtering done using sf package).
+    ]]></help>
+    <citations>
+    </citations>
+</tool>

@@ -1,8 +1,15 @@
 <?xml version='1.0' encoding='utf-8'?>
 <toolbox monitor="true">
-  <section id="aquainfra" name="AquaInfra">
+  <section id="aquainfra" name="AquaInfra Examples">
     <tool file="../tools/aquainfra/get_species_data.xml" />
     <tool file="../tools/aquainfra/snap_to_network.xml" />
+    <tool file="../tools/aquainfra/snap_to_network_canvas.xml" />
+  </section>
+  <section id="aquainfra2" name="AquaInfra Future">
+    <tool file="../tools/aquainfra/get_species_data.xml" />
+    <tool file="../tools/aquainfra/filter_species_data.xml" />
+    <tool file="../tools/aquainfra/get_drainage_basin.xml" />
+    <tool file="../tools/aquainfra/filter_species_data2.xml" />
     <tool file="../tools/aquainfra/snap_to_network_canvas.xml" />
   </section>
   <section id="getext" name="Get Data">
