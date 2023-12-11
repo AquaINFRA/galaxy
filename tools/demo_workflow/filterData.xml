@@ -1,5 +1,5 @@
 <tool id="filterData" name="Filter dataset" version="0.1.0">
-    <description> creates a subset of the data based on the parameters "quality level" and "accuracy".</description>
+    <description> creates a subset of the data based on the parameters "quality level", "accuracy", and "processing stage".</description>
     <requirements>
         <requirement type="package" version="4.1.2">R</requirement>
         <requirement type="package" version="1.2.0">getopt</requirement>
