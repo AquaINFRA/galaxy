@@ -17,7 +17,7 @@
             <option value="Other">No other species right now</option>
         </param>
         <param name="basin_id" type="select" label="Which basin...">
-            <option value="481051">Basin Sao Francisco (I think)</option>
+            <option value="481051">Basin Sao Francisco</option>
             <option value="Other">No other basin right now</option>
         </param>
     </inputs>

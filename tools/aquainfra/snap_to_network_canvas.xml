@@ -17,8 +17,8 @@
             <option value="accumulation">Accumulation</option>
             <option value="both">Both</option>
         </param>
-        <param name="basin_id" type="select" label="Which basin...">
-            <option value="481051">Basin Sao Francisco (I think)</option>
+        <param name="basin_id" type="select" label="Which drainage basin...">
+            <option value="481051">Basin Sao Francisco</option>
             <option value="Other">No other basin right now</option>
         </param>
         <param name="distance" type="integer" label="Maximum radius in map pixels." value="500"></param>
