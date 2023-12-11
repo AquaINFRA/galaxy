@@ -13,14 +13,14 @@ option_specification = matrix(c(
 ), byrow=TRUE, ncol=4);
 options = getopt(option_specification);
 
-temperature_values <- read.csv(file=options$inputData, sep = ',', header = TRUE)
+input_data <- read.csv(file=options$inputData, sep = ',', header = TRUE)
 
 if ( options$checked ) {
-  temperature_values <- dplyr::filter(temperature_values, temperature_values$quality_level == "checked")
+  input_data <- dplyr::filter(input_data, input_data$quality_level == "checked")
 }
 
 if (options$processing == "raw") {
-  temperature_values <- dplyr::filter(temperature_values, temperature_values$data_processing == "raw")
+  input_data <- dplyr::filter(input_data, input_data$data_processing == "raw")
 }
 
 cat("\n inputData", options$inputData)
@@ -28,5 +28,5 @@ cat("\n checked: ", options$checked)
 cat("\n accuracy: ", options$accuracy)
 cat("\n outputData: ", options$outputData)
   
-temperature_values <- dplyr::filter(temperature_values, temperature_values$accuracy < options$accuracy)
-write.table(temperature_values, options$outputData, quote = FALSE, sep = ",", row.names=FALSE)
+input_data <- dplyr::filter(input_data, input_data$accuracy < options$accuracy)
+write.table(input_data, options$outputData, quote = FALSE, sep = ",", row.names=FALSE)

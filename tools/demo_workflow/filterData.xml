@@ -28,6 +28,7 @@
         <data name="output" format="csv" />
     </outputs>
     <tests>
+        <!-- Run test with: planemo test filterData.xml - -test_output=filterData_test_output.html -->
         <test>
             <param name="inputFile" value="filterData_testdata_input.csv"/>
             <param name="checked" value="true"/>
