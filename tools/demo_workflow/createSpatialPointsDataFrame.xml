@@ -1,0 +1,66 @@
+<tool id="createSpatialPointsDataFrame" name="Create Spatial Points Dataframe" version="0.1.0">
+    <description> based on a .csv file.</description>
+    <requirements>
+        <requirement type="package" version="4.1.2">R</requirement>
+        <requirement type="package" version="1.2.0">getopt</requirement>
+        <requirement type="package" version="2.0.0">sp</requirement>
+    </requirements>
+    <stdio>
+        <exit_code range="1:" />
+    </stdio>
+    <command><![CDATA[
+        Rscript $__tool_directory__/createSpatialPointsDataFrame.R --inputData $inputFile --outputData $output
+    ]]></command>
+    <inputs>
+        <param type="data" format="csv" name="inputFile" label="Observations as csv"/>
+        <!--<param name="latitude"
+            type="data_column"
+            data_ref="inputFile"
+            numerical="False"
+            use_header_names="true"
+            label="Select the column containing the latitude values" />
+        <param name="longitude"
+            type="data_column"
+            data_ref="inputFile"
+            numerical="False"
+            use_header_names="true"
+            label="Select the column containing the longitude values" />-->
+    </inputs>
+    <outputs>
+        <data name="output" format="csv" />
+    </outputs>
+    <tests>
+        <!-- Run test with: pplanemo test createSpatialPointsDataFrame.xml - -test_output=createSpatialPointsDf_test_output.html -->
+        <test>
+            <param name="inputFile" value="spatialPointsDf_testdata_input.csv"/>
+            <output name="output" file="spatialPointsDf_testdata_output.csv" />
+        </test> 
+    </tests>
+    <help><![CDATA[
+        WGS84 is used as a coordinate reference system. The input dataset needs to have a column "latitude" and "longitude".
+    ]]></help>
+    <citations>
+        <citation type="bibtex">
+            @Manual{getopt,
+                title = {getopt: C-Like 'getopt' Behavior},
+                author = {Trevor L Davis and Allen Day},
+                year = {2019},
+                note = {R package version 1.20.3},
+                url = {https://CRAN.R-project.org/package=getopt},
+            }
+        </citation>
+        <citation type="bibtex">
+            @Article{sp,
+                author = {Edzer J. Pebesma and Roger Bivand},
+                title = {Classes and methods for spatial data in {R}},
+                journal = {R News},
+                year = {2005},
+                volume = {5},
+                number = {2},
+                pages = {9--13},
+                month = {November},
+                url = {https://CRAN.R-project.org/doc/Rnews/},
+            }
+        </citation>
+    </citations>
+</tool>
