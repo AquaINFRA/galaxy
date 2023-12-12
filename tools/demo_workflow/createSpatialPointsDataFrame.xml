@@ -3,6 +3,7 @@
     <requirements>
         <requirement type="package" version="4.1.2">R</requirement>
         <requirement type="package" version="1.2.0">getopt</requirement>
+        <requirement type="package" version="1.0.14">sf</requirement>
         <requirement type="package" version="2.0.0">sp</requirement>
     </requirements>
     <stdio>
@@ -13,31 +14,20 @@
     ]]></command>
     <inputs>
         <param type="data" format="csv" name="inputFile" label="Observations as csv"/>
-        <!--<param name="latitude"
-            type="data_column"
-            data_ref="inputFile"
-            numerical="False"
-            use_header_names="true"
-            label="Select the column containing the latitude values" />
-        <param name="longitude"
-            type="data_column"
-            data_ref="inputFile"
-            numerical="False"
-            use_header_names="true"
-            label="Select the column containing the longitude values" />-->
     </inputs>
     <outputs>
-        <data name="output" format="csv" />
+        <data name="output" format="geojson" />
     </outputs>
     <tests>
         <!-- Run test with: pplanemo test createSpatialPointsDataFrame.xml - -test_output=createSpatialPointsDf_test_output.html -->
         <test>
             <param name="inputFile" value="spatialPointsDf_testdata_input.csv"/>
-            <output name="output" file="spatialPointsDf_testdata_output.csv" />
+            <!-- lines_diff is needed because Galaxy changes the name property of the geopjson dynamically.-->
+            <output name="output" file="spatialPointsDf_testdata_output.geojson" lines_diff="2"/>
         </test> 
     </tests>
     <help><![CDATA[
-        WGS84 is used as a coordinate reference system. The input dataset needs to have a column "latitude" and "longitude".
+        WGS84 is used as a coordinate reference system. The input dataset needs to have a column "latitude" and "longitude". The output dataset is a .geojson.
     ]]></help>
     <citations>
         <citation type="bibtex">
@@ -60,6 +50,19 @@
                 pages = {9--13},
                 month = {November},
                 url = {https://CRAN.R-project.org/doc/Rnews/},
+            }
+        </citation>
+        <citation type="bibtex">
+            @Article{sf,
+                author = {Edzer Pebesma},
+                title = {{Simple Features for R: Standardized Support for Spatial Vector Data}},
+                year = {2018},
+                journal = {{The R Journal}},
+                doi = {10.32614/RJ-2018-009},
+                url = {https://doi.org/10.32614/RJ-2018-009},
+                pages = {439--446},
+                volume = {10},
+                number = {1},
             }
         </citation>
     </citations>
