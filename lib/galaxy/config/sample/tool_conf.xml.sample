@@ -3,6 +3,7 @@
   <section id="demo_workflow" name="Demo Workflow">
     <tool file="demo_workflow/filterData.xml"></tool>
     <tool file="demo_workflow/createSpatialPointsDataFrame.xml"></tool>
+    <tool file="demo_workflow/createSpatialPolygonsDataFrame.xml"></tool>
   </section>
   <section id="getext" name="Get Data">
     <tool file="data_source/upload.xml" />
