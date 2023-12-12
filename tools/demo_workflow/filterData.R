@@ -23,10 +23,11 @@ if (options$processing == "raw") {
   input_data <- dplyr::filter(input_data, input_data$data_processing == "raw")
 }
 
+input_data <- dplyr::filter(input_data, input_data$accuracy < options$accuracy)
+
 cat("\n inputData", options$inputData)
 cat("\n checked: ", options$checked)
 cat("\n accuracy: ", options$accuracy)
 cat("\n outputData: ", options$outputData)
-  
-input_data <- dplyr::filter(input_data, input_data$accuracy < options$accuracy)
+
 write.table(input_data, options$outputData, quote = FALSE, sep = ",", row.names=FALSE)

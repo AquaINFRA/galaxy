@@ -38,7 +38,7 @@
         </test>
     </tests>
     <help><![CDATA[
-        Routes can be calculated for coordinates withing the boundaries of the provided datasets.
+        The dataset can be filtered if it contains the three columns "quality_level" (checked or unchecked), "data_processing" (raw of adjusted), "accuracy" (double numbers).
     ]]></help>
     <citations>
         <citation type="bibtex">
