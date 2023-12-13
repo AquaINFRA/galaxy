@@ -19,7 +19,7 @@
         <data name="output" format="geojson" />
     </outputs>
     <tests>
-        <!-- Run test with: pplanemo test createSpatialPointsDataFrame.xml - -test_output=createSpatialPointsDf_test_output.html -->
+        <!-- Run test with: planemo test createSpatialPointsDataFrame.xml - -test_output=createSpatialPointsDf_test_output.html -->
         <test>
             <param name="inputFile" value="spatialPointsDf_testdata_input.csv"/>
             <!-- lines_diff is needed because Galaxy changes the name property of the geopjson dynamically.-->
