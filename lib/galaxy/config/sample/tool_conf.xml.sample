@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <toolbox monitor="true">
-  <section id="demo_workflow" name="Demo Workflow">
+  <section id="interpolating_observations" name="Interpolating observations">
     <tool file="demo_workflow/filterData.xml"></tool>
     <tool file="demo_workflow/createSpatialPointsDataFrame.xml"></tool>
     <tool file="demo_workflow/createSpatialPolygonsDataFrame.xml"></tool>
