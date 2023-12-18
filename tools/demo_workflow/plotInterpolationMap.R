@@ -11,10 +11,12 @@ option_specification = matrix(c(
     'inputData2', 'i2', 1, 'character',
     'inputData3', 'i3', 1, 'character',
     'idw_power', 'i4', 1, 'double',
+    'test_case', 'i5', 1, 'character',
     'outputData', 'o', 2, 'character'
 ), byrow=TRUE, ncol=4);
 options = getopt(option_specification);
 
+cat("\n test", options$test_case)
 cat("\n data", options$inputData1)
 cat("\n polygon", options$inputData2)
 cat("\n points", options$inputData3)
@@ -27,6 +29,10 @@ points <- as_Spatial(st_read(options$inputData3))
 power <- options$idw_power
 
 runInterpolation <- function(points, values, interPolationPower){
+  if (options$test_case == "true") {
+    cat("\n run test")
+    set.seed(123)
+  }
   grd              <- as.data.frame(spsample(points, "regular", n=50000))
   names(grd)       <- c("X", "Y")
   coordinates(grd) <- c("X", "Y")

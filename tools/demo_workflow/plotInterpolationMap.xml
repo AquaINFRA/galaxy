@@ -13,12 +13,16 @@
         <exit_code range="1:" />
     </stdio>
     <command><![CDATA[
-        Rscript $__tool_directory__/plotInterpolationMap.R --inputData1 $inputFile1 --inputData2 $inputFile2 --inputData3 $inputFile3 --idw_power $idw_power --outputData $output
+        Rscript $__tool_directory__/plotInterpolationMap.R --inputData1 $inputFile1 --inputData2 $inputFile2 --inputData3 $inputFile3 --idw_power $idw_power --test_case $testCase --outputData $output
     ]]></command>
     <inputs>
         <param type="data" format="csv" name="inputFile1" label="Select the .csv file including the observations."/>
         <param type="data" format="geojson" name="inputFile2" label="Select the .geojson containing the study area."/>
         <param type="data" format="geojson" name="inputFile3" label="Select the .geojson containing the spatial points data frame."/>
+        <param type="select" name="testCase" label="Should a seed be set?">
+            <option value="false">No</option>
+            <option value="true">Yes</option>
+        </param>
         <param value="1" min="0" max="3" type="float" name="idw_power" label="Select the interpolation power of the IDW method."/>
     </inputs>
     <outputs>
@@ -31,6 +35,7 @@
             <param name="inputFile2" value="plotInterpolationMap_test_input2.geojson"/>
             <param name="inputFile3" value="plotInterpolationMap_test_input3.geojson"/>
             <param name="idw_power" value="2"/>
+            <param name="testCase" value="true"/>
             <output name="output" file="plotInterpolationMap_test_output.png"/>
         </test>
     </tests>
@@ -91,7 +96,7 @@
             }
         </citation>
         <citation type="bibtex">
-            @Article{,
+            @Article{gstat,
                 title = {Spatio-Temporal Interpolation using gstat},
                 author = {Benedikt Gräler and Edzer Pebesma and Gerard Heuvelink},
                 year = {2016},
