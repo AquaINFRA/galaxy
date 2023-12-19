@@ -14,8 +14,8 @@
         Rscript $__tool_directory__/plotStudyArea.R --spatialPolygon $spatial_polygon --spatialObservations $spatial_observations --outputData $output
     ]]></command>
     <inputs>
-        <param type="data" format="geojson" name="spatial_polygon" label="Select file that should be aligned"/>
-        <param type="data" format="geojson" name="spatial_observations" label="Select file upon which the alignment should be based"/>
+        <param type="data" format="geojson" name="spatial_polygon" label="Select the polygon stored as .geojson."/>
+        <param type="data" format="geojson" name="spatial_observations" label="Select the observations stored as .geojson."/>
     </inputs>
     <outputs>
         <data name="output" format="png" />
