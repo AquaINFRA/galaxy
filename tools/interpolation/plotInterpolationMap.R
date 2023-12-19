@@ -16,7 +16,7 @@ option_specification = matrix(c(
 ), byrow=TRUE, ncol=4);
 options = getopt(option_specification);
 
-cat("\n test", options$test_case)
+cat("\n test", options$testCase)
 cat("\n data", options$dataObservations)
 cat("\n polygon", options$studyArea)
 cat("\n points", options$spatialData)

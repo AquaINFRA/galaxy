@@ -19,7 +19,7 @@
         <param type="data" format="csv" name="data_observations" label="Select the .csv file including the observations."/>
         <param type="data" format="geojson" name="study_area" label="Select the .geojson containing the study area."/>
         <param type="data" format="geojson" name="spatial_data" label="Select the .geojson containing the spatial points data frame."/>
-        <param type="select" name="testCase" label="Should a seed be set?">
+        <param type="select" name="test_case" label="Should a seed be set?">
             <option value="false">No</option>
             <option value="true">Yes</option>
         </param>
@@ -32,10 +32,10 @@
         <!-- Run test with: planemo test plotInterpolationMap.xml - -test_output=plotInterpolationMap.html -->
         <test>
             <param name="data_observations" value="plotInterpolationMap_test_input1.csv"/>
-            <param name="inputFstudy_areaile2" value="plotInterpolationMap_test_input2.geojson"/>
+            <param name="study_area" value="plotInterpolationMap_test_input2.geojson"/>
             <param name="spatial_data" value="plotInterpolationMap_test_input3.geojson"/>
             <param name="idw_power" value="2"/>
-            <param name="testCase" value="true"/>
+            <param name="test_case" value="true"/>
             <output name="output" file="plotInterpolationMap_test_output.png"/>
         </test>
     </tests>
