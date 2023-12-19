@@ -7,30 +7,30 @@ library("gstat")
 
 args = commandArgs(trailingOnly=TRUE)
 option_specification = matrix(c(
-    'inputData1', 'i1', 1, 'character',
-    'inputData2', 'i2', 1, 'character',
-    'inputData3', 'i3', 1, 'character',
-    'idw_power', 'i4', 1, 'double',
-    'test_case', 'i5', 1, 'character',
+    'dataObservations', 'i1', 1, 'character',
+    'studyArea', 'i2', 1, 'character',
+    'spatialData', 'i3', 1, 'character',
+    'idwPower', 'i4', 1, 'double',
+    'testCase', 'i5', 1, 'character',
     'outputData', 'o', 2, 'character'
 ), byrow=TRUE, ncol=4);
 options = getopt(option_specification);
 
 cat("\n test", options$test_case)
-cat("\n data", options$inputData1)
-cat("\n polygon", options$inputData2)
-cat("\n points", options$inputData3)
-cat("\n idw_power", options$idw_power)
+cat("\n data", options$dataObservations)
+cat("\n polygon", options$studyArea)
+cat("\n points", options$spatialData)
+cat("\n idwPower", options$idwPower)
 cat("\n outputData: ", options$outputData)
 
-input_data <- read.csv(file=options$inputData1, sep = ',', header = TRUE)
-polygon <- as_Spatial(st_read(options$inputData2))
-points <- as_Spatial(st_read(options$inputData3))
-power <- options$idw_power
+input_data <- read.csv(file=options$dataObservations, sep = ',', header = TRUE)
+polygon <- as_Spatial(st_read(options$studyArea))
+points <- as_Spatial(st_read(options$spatialData))
+power <- options$idwPower
 
 runInterpolation <- function(points, values, interPolationPower){
-  if (options$test_case == "true") {
-    cat("\n run test")
+  if (options$testCase == "true") {
+    cat("\n set seed!")
     set.seed(123)
   }
   grd              <- as.data.frame(spsample(points, "regular", n=50000))

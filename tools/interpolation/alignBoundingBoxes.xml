@@ -1,33 +1,34 @@
-<tool id="createSpatialPointsDataFrame" name="Create Spatial Points Dataframe" version="0.1.0">
-    <description> based on a .csv file.</description>
+<tool id="interpolation_align_bounding_boxes" name="Align bounding boxes" version="1.0">
+    <description> of two spatial dataframes.</description>
     <requirements>
         <requirement type="package" version="4.1.2">R</requirement>
         <requirement type="package" version="1.2.0">getopt</requirement>
         <requirement type="package" version="1.0.14">sf</requirement>
-        <requirement type="package" version="2.0.0">sp</requirement>
     </requirements>
     <stdio>
-        <exit_code range="1:" />
+        <exit_code range="1:" level="fatal" description="Error occurred. Please check Tool: Align bounding boxes"/>
     </stdio>
     <command><![CDATA[
-        Rscript $__tool_directory__/createSpatialPointsDataFrame.R --inputData $inputFile --outputData $output
+        Rscript $__tool_directory__/alignBoundingBoxes.R --spatialObject1 $spatial_object_1 --spatialObject2 $spatial_object_2 --outputData $output
     ]]></command>
     <inputs>
-        <param type="data" format="csv" name="inputFile" label="Observations as csv"/>
+        <param type="data" format="geojson" name="spatial_object_1" label="Select file that should be aligned"/>
+        <param type="data" format="geojson" name="spatial_object_2" label="Select file upon which the alignment should be based"/>
     </inputs>
     <outputs>
         <data name="output" format="geojson" />
     </outputs>
     <tests>
-        <!-- Run test with: planemo test createSpatialPointsDataFrame.xml - -test_output=createSpatialPointsDf_test_output.html -->
+        <!-- Run test with: planemo test alignBoundingBoxes.xml - -test_output=alignBoundingBoxes_test_output.html -->
         <test>
-            <param name="inputFile" value="spatialPointsDf_testdata_input.csv"/>
+            <param name="spatial_object_1" value="alignBoundingBoxes_test_input1.geojson"/>
+            <param name="spatial_object_2" value="alignBoundingBoxes_test_input2.geojson"/>
             <!-- lines_diff is needed because Galaxy changes the name property of the geopjson dynamically.-->
-            <output name="output" file="spatialPointsDf_testdata_output.geojson" lines_diff="2"/>
+            <output name="output" file="alignBoundingBoxes_test_output.geojson" lines_diff="2"/>
         </test> 
     </tests>
     <help><![CDATA[
-        WGS84 is used as a coordinate reference system. The input dataset needs to have a column "latitude" and "longitude". The output dataset is a .geojson.
+        The bounding box of the second dataset is taken to overwrite the bounding box of the first dataset. As a result, the first dataset will fit to the second one. 
     ]]></help>
     <citations>
         <citation type="bibtex">
@@ -37,19 +38,6 @@
                 year = {2019},
                 note = {R package version 1.20.3},
                 url = {https://CRAN.R-project.org/package=getopt},
-            }
-        </citation>
-        <citation type="bibtex">
-            @Article{sp,
-                author = {Edzer J. Pebesma and Roger Bivand},
-                title = {Classes and methods for spatial data in {R}},
-                journal = {R News},
-                year = {2005},
-                volume = {5},
-                number = {2},
-                pages = {9--13},
-                month = {November},
-                url = {https://CRAN.R-project.org/doc/Rnews/},
             }
         </citation>
         <citation type="bibtex">

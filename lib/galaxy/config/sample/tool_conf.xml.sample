@@ -1,11 +1,12 @@
 <?xml version='1.0' encoding='utf-8'?>
 <toolbox monitor="true">
-  <section id="interpolating_observations" name="Interpolating observations">
-    <tool file="demo_workflow/filterData.xml"></tool>
-    <tool file="demo_workflow/createSpatialPointsDataFrame.xml"></tool>
-    <tool file="demo_workflow/createSpatialPolygonsDataFrame.xml"></tool>
-    <tool file="demo_workflow/alignBoundingBoxes.xml"></tool>
-    <tool file="demo_workflow/plotStudyArea.xml"></tool>
+  <section id="interpolation" name="Interpolation">
+    <tool file="interpolation/filterData.xml"></tool>
+    <tool file="interpolation/createSpatialPointsDataFrame.xml"></tool>
+    <tool file="interpolation/createSpatialPolygonsDataFrame.xml"></tool>
+    <tool file="interpolation/alignBoundingBoxes.xml"></tool>
+    <tool file="interpolation/plotStudyArea.xml"></tool>
+    <tool file="interpolation/plotInterpolationMap.xml"></tool>
   </section>
   <section id="getext" name="Get Data">
     <tool file="data_source/upload.xml" />

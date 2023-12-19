@@ -1,28 +1,28 @@
-<tool id="filterData" name="Filter dataset" version="0.1.0">
-    <description> creates a subset of the data based on the parameters "quality level", "accuracy", and "processing stage".</description>
+<tool id="interpolation_filter_data" name="Filter dataset" version="1.0">
+    <description> based on the parameters (column names) "quality level", "accuracy", and "processing stage".</description>
     <requirements>
         <requirement type="package" version="4.1.2">R</requirement>
         <requirement type="package" version="1.2.0">getopt</requirement>
         <requirement type="package" version="1.1.2">dplyr</requirement>
     </requirements>
     <stdio>
-        <exit_code range="1:" />
+        <exit_code range="1:" level="fatal" description="Error occurred. Please check Tool: Filter dataset"/>
     </stdio>
     <command><![CDATA[
-        Rscript $__tool_directory__/filterData.R --inputData $inputFile --checked $checked --accuracy $accuracy --processing $processing --outputData $output
+        Rscript $__tool_directory__/filterData.R --inputData $inputFile --qualityChecked $quality_checked --dataAccuracy $data_accuracy --processingStage $processing_stage --outputData $output
     ]]></command>
     <inputs>
         <param type="data" format="csv" name="inputFile" label="Observations as csv"/>
-        <param type="select" name="checked" label="Show only quality checked observations?">
+        <param type="select" name="quality_checked" label="Show only quality checked observations?">
             <option value="false">No</option>
             <option value="true">Yes</option>
         </param>
-        <param type="select" name="processing" label="Which processing stage should be included?">
+        <param type="select" name="processing_stage" label="Which processing stage should be included?">
             <option value="both">Adjusted and raw</option>
             <option value="adjusted">Adjusted</option>
             <option value="raw">Raw</option>
         </param>
-        <param value="0.21" min="0.00" max="0.51" type="float" name="accuracy" label="Show only observations with an accuracy smaller than..."/>
+        <param value="0.21" min="0.00" max="1.00" type="float" name="data_accuracy" label="Show only observations with an accuracy smaller than..."/>
     </inputs>
     <outputs>
         <data name="output" format="csv" />
@@ -31,14 +31,14 @@
         <!-- Run test with: planemo test filterData.xml - -test_output=filterData_test_output.html -->
         <test>
             <param name="inputFile" value="filterData_testdata_input.csv"/>
-            <param name="checked" value="true"/>
-            <param name="processing" value="adjusted"/>
-            <param name="accuracy" value="0.1"/>
+            <param name="quality_checked" value="true"/>
+            <param name="processing_stage" value="adjusted"/>
+            <param name="data_accuracy" value="0.1"/>
             <output name="output" file="filterData_testdata_output.csv" />
         </test>
     </tests>
     <help><![CDATA[
-        The dataset can be filtered if it contains the three columns "quality_level" (checked or unchecked), "data_processing" (raw of adjusted), "accuracy" (double numbers).
+        The dataset can be filtered if it contains the three columns "quality_level" (incl. the values checked or unchecked), "data_processing" (i.e., raw of adjusted), "accuracy" (i.e., double numbers between 0 and 1).
     ]]></help>
     <citations>
         <citation type="bibtex">
