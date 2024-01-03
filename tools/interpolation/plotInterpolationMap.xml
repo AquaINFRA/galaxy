@@ -92,7 +92,7 @@
             <param name="sample_points" value="50000"/>
             <param name="sample_type" value="regular"/>
             <param name="legend_label" value="Legend"/>
-            <param name="legend_position" value="FALSE"/>
+            <param name="legend_position" value="false"/>
             <param name="number_classes" value="10"/>
             <param name="dot_size" value="1"/>
             <param name="color_type" value="RdBu"/>
