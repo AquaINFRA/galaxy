@@ -1,34 +1,31 @@
-<tool id="interpolation_run_idw_interpolation" name="Run IDW interpolation" version="1.0">
-    <description> based on a .csv and .geojson file.</description>
+<tool id="interpolation_run_idw_interpolation" name="Run IDW interpolation" version="1.0" profile="22.05">
+    <description>based on a .csv and .geojson file</description>
     <requirements>
-        <requirement type="package" version="4.1.2">R</requirement>
-        <requirement type="package" version="1.2.0">getopt</requirement>
-        <requirement type="package" version="1.0.14">sf</requirement>
-        <requirement type="package" version="3.3.3">tmap</requirement>
-        <requirement type="package" version="1.1.3">RColorBrewer</requirement>
-        <requirement type="package" version="3.6.23">raster</requirement>
-        <requirement type="package" version="2.1.1">gstat</requirement>
+        <requirement type="package" version="4.1.2">r-base</requirement>
+        <requirement type="package" version="1.2.0">r-getopt</requirement>
+        <requirement type="package" version="1.0.14">r-sf</requirement>
+        <requirement type="package" version="3.3.3">r-tmap</requirement>
+        <requirement type="package" version="1.1.3">r-rcolorbrewer</requirement>
+        <requirement type="package" version="3.6.23">r-raster</requirement>
+        <requirement type="package" version="2.1.1">r-gstat</requirement>
     </requirements>
-    <stdio>
-        <exit_code range="1:" level="fatal" description="Error occurred. Please check Tool: Plot interpolation map"/>
-    </stdio>
-    <command><![CDATA[
-        Rscript $__tool_directory__/run_idw_interpolation.R 
-        --observationsCsv $observations_csv
+    <command detect_errors='exit_code'><![CDATA[
+    Rscript '$__tool_directory__/run_idw_interpolation.R'
+        --observationsCsv '$observations_csv'
         --latitudeColumn $latitude_column
         --longitudeColumn $longitude_column
         --observationsColumn $observations_column 
-        --studyArea $study_area 
+        --studyArea '$study_area'
         --idwPower $idw_power 
         --samplePoints $sample_points 
         --sampleType $sample_type
-        --legendLabel $legend_label
+        --legendLabel '$legend_label'
         --legendPosition $legend_position
         --numberClasses $number_classes
         --dotSize $dot_size
         --colorType $color_type
         --testCase $test_case  
-        --outputData $output
+        --outputData '$output'
     ]]></command>
     <inputs>
         <param type="data" format="csv" name="observations_csv" label="Select the .csv file including the observations."/>
@@ -44,7 +41,7 @@
             <option value="stratified">Stratified</option>
             <option value="nonaligned">Nonaligned</option>
         </param>
-        <param type="text" name="legend_label" label="Enter a label for the legend." optional="false"/>
+        <param type="text" name="legend_label" label="Enter a label for the legend" optional="false"/>
         <param type="select" name="legend_position" label="Should the legend be displayed inside or outside the frame?">
             <option value="false">Inside</option>
             <option value="true">Outside</option>
@@ -81,7 +78,7 @@
         <data name="output" format="png" />
     </outputs>
     <tests>
-        <!-- Run test with: planemo test plotInterpolationMap.xml - -test_output=plotInterpolationMap.html -->
+        <!-- Run test with: planemo test --biocontainers plotInterpolationMap.xml - -test_output=plotInterpolationMap.html -->
         <test>
             <param name="observations_csv" value="run_idw_interpolation_test_input1.csv"/>
             <param name="latitude_column" value="3"/>
@@ -113,19 +110,7 @@
                 url = {https://CRAN.R-project.org/package=getopt},
             }
         </citation>
-        <citation type="bibtex">
-            @Article{sf,
-                author = {Edzer Pebesma},
-                title = {{Simple Features for R: Standardized Support for Spatial Vector Data}},
-                year = {2018},
-                journal = {{The R Journal}},
-                doi = {10.32614/RJ-2018-009},
-                url = {https://doi.org/10.32614/RJ-2018-009},
-                pages = {439--446},
-                volume = {10},
-                number = {1},
-            }
-        </citation>
+        <citation type="doi">10.32614/RJ-2018-009</citation>
         <citation type="bibtex">
             @Article{tmap,
                 title = {{tmap}: Thematic Maps in {R}},
