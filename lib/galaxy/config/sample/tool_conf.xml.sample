@@ -6,7 +6,7 @@
     <tool file="interpolation/createSpatialPolygonsDataFrame.xml"></tool>
     <tool file="interpolation/alignBoundingBoxes.xml"></tool>
     <tool file="interpolation/plotStudyArea.xml"></tool>
-    <tool file="interpolation/plotInterpolationMap.xml"></tool>
+    <tool file="interpolation/run_idw_interpolation.xml"></tool>
     <tool file="interpolation/compareFigures.xml"></tool>
   </section>
   <section id="getext" name="Get Data">
