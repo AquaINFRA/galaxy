@@ -13,7 +13,7 @@
         <exit_code range="1:" level="fatal" description="Error occurred. Please check Tool: Plot interpolation map"/>
     </stdio>
     <command><![CDATA[
-        Rscript $__tool_directory__/plotInterpolationMap.R 
+        Rscript $__tool_directory__/run_idw_interpolation.R 
         --observationsCsv $observations_csv
         --latitudeColumn $latitude_column
         --longitudeColumn $longitude_column
@@ -83,11 +83,11 @@
     <tests>
         <!-- Run test with: planemo test plotInterpolationMap.xml - -test_output=plotInterpolationMap.html -->
         <test>
-            <param name="observations_csv" value="plotInterpolationMap_test_input1.csv"/>
+            <param name="observations_csv" value="run_idw_interpolation_test_input1.csv"/>
             <param name="latitude_column" value="3"/>
             <param name="longitude_column" value="4"/>
             <param name="observations_column" value="5"/>
-            <param name="study_area" value="plotInterpolationMap_test_input2.geojson"/>
+            <param name="study_area" value="run_idw_interpolation_test_input2.geojson"/>
             <param name="idw_power" value="2"/>
             <param name="sample_points" value="50000"/>
             <param name="sample_type" value="regular"/>
@@ -97,7 +97,7 @@
             <param name="dot_size" value="1"/>
             <param name="color_type" value="RdBu"/>
             <param name="test_case" value="true"/>
-            <output name="output" file="plotInterpolationMap_test_output.png"/>
+            <output name="output" file="run_idw_interpolation_test_output.png"/>
         </test>
     </tests>
     <help><![CDATA[
