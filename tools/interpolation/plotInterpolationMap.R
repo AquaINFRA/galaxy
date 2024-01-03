@@ -8,43 +8,55 @@ library("gstat")
 args = commandArgs(trailingOnly=TRUE)
 option_specification = matrix(c(
     'observationsCsv', 'i1', 1, 'character',
-    'studyArea', 'i2', 1, 'character',
-    'idwPower', 'i3', 1, 'double',
-    'samplePoints', 'i4', 1, 'double',
-    'sampleType', 'i5', 1, 'character',
-    'legendLabel', 'i6', 1, 'character',
-    'legendPosition', 'i7', 1, 'character',
-    'dotSize', 'i9', 1, 'double',
-    'colorType', 'i10', 1, 'character',
-    'testCase', 'i8', 1, 'character',
+    'latitudeColumn', 'i2', 1, 'double',
+    'longitudeColumn', 'i3', 1, 'double',
+    'observationsColumn', 'i4', 1, 'double',
+    'studyArea', 'i5', 1, 'character',
+    'idwPower', 'i6', 1, 'double',
+    'samplePoints', 'i7', 1, 'double',
+    'sampleType', 'i8', 1, 'character',
+    'legendLabel', 'i9', 1, 'character',
+    'legendPosition', 'i10', 1, 'character',
+    'numberClasses', 'i11', 1, 'double',
+    'dotSize', 'i12', 1, 'double',
+    'colorType', 'i13', 1, 'character',
+    'testCase', 'i14', 1, 'character',
     'outputData', 'o', 2, 'character'
 ), byrow=TRUE, ncol=4);
 options = getopt(option_specification);
 
-cat("\n observationsCsv", options$observationsCsv)
-cat("\n studyArea", options$studyArea)
-cat("\n idwPower", options$idwPower)
-cat("\n samplePoints", options$samplePoints)
-cat("\n sampleType", options$sampleType)
-cat("\n legendLabel", options$legendLabel)
-cat("\n legendposition", options$legendPosition)
-cat("\n dotSize", options$dotSize)
-cat("\n colorType", options$colorType)
-cat("\n testCase", options$testCase)
-cat("\n outputData: ", options$outputData)
-
 obsData <- read.csv(file=options$observationsCsv, sep = ',', header = TRUE)
+latitudeColumn <- options$latitudeColumn
+longitudeColumn <- options$longitudeColumn
+observationsColumn <- options$observationsColumn
 studyArea <- options$studyArea
 idwPower <- options$idwPower
 samplePoints <- options$samplePoints
 sampleType <- options$sampleType
 legendLabel <- options$legendLabel
 legendPosition <- options$legendPosition
+numberClasses <- options$numberClasses
 dotSize <- options$dotSize
 colorType <- options$colorType
 testCase <- options$testCase
 
-coordinates(obsData) <- c("longitude", "latitude")
+#cat("\n observationsCsv", options$observationsCsv)
+cat("\n latitudeColumn", latitudeColumn)
+cat("\n longitudeColumn", longitudeColumn)
+cat("\n observationsColumn", observationsColumn)
+#cat("\n studyArea", studyArea)
+cat("\n idwPower", idwPower)
+cat("\n samplePoints", samplePoints)
+cat("\n sampleType", sampleType)
+cat("\n legendLabel", legendLabel)
+cat("\n legendposition", legendPosition)
+cat("\n numberClasses", numberClasses)
+cat("\n dotSize", dotSize)
+cat("\n colorType", colorType)
+cat("\n testCase", testCase)
+#cat("\n outputData: ", options$outputData)
+
+coordinates(obsData) <- c(colnames(obsData)[longitudeColumn], colnames(obsData)[latitudeColumn])
 sf_obsData <- as_Spatial(st_as_sf(obsData))
 
 polygon <- as_Spatial(st_read(studyArea))
@@ -68,7 +80,7 @@ runInterpolation <- function(points, values, interpolation_power, sample_points,
 
 plotInterpolationMap <- function(raster, points, legend_label){
   plot <- tm_shape(raster) + 
-    tm_raster(n=10,palette = rev(brewer.pal(7, colorType)), auto.palette.mapping = FALSE,
+    tm_raster(n=numberClasses,palette = rev(brewer.pal(7, colorType)), auto.palette.mapping = FALSE,
               title=legend_label) +
     tm_shape(points) + tm_dots(size=dotSize) +
     tm_legend(legend.outside=legendPosition)

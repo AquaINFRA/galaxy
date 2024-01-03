@@ -14,13 +14,17 @@
     </stdio>
     <command><![CDATA[
         Rscript $__tool_directory__/plotInterpolationMap.R 
-        --observationsCsv $observations_csv 
+        --observationsCsv $observations_csv
+        --latitudeColumn $latitude_column
+        --longitudeColumn $longitude_column
+        --observationsColumn $observations_column 
         --studyArea $study_area 
         --idwPower $idw_power 
         --samplePoints $sample_points 
         --sampleType $sample_type
         --legendLabel $legend_label
         --legendPosition $legend_position
+        --numberClasses $number_classes
         --dotSize $dot_size
         --colorType $color_type
         --testCase $test_case  
@@ -29,6 +33,9 @@
     <inputs>
         <param type="data" format="csv" name="observations_csv" label="Select the .csv file including the observations."/>
         <param type="data" format="geojson" name="study_area" label="Select the .geojson containing the study area."/>
+        <param name="latitude_column" type="data_column" data_ref="observations_csv" label="In which column are the latitude coordinates?"/>
+        <param name="longitude_column" type="data_column" data_ref="observations_csv" label="In which column are the longitude coordinates?"/>
+        <param name="observations_column" type="data_column" data_ref="observations_csv" label="In which column are the observation values?"/>
         <param value="2" min="0.1" max="5" type="float" name="idw_power" label="Select the interpolation power of the IDW method."/>
         <param value="50000" min="1000" max="100000" type="integer" name="sample_points" label="Select the number of sample points."/>
         <param type="select" name="sample_type" label="Select a sample type.">
@@ -43,6 +50,7 @@
             <option value="true">Outside</option>
         </param>
         <param value="0.2" min="0.1" max="2" type="float" name="dot_size" label="Select the dot size of the points shown on the map."/>
+        <param value="10" min="1" max="100" type="integer" name="number_classes" label="Number of classes (Note: Not all values are possible. tmap tries to generate a number of classes which are as close to the indicated value as possible)."/>
         <param type="select" name="color_type" label="Select a color palette.">
             <option value="RdBu">RdBu</option>
             <option value="Blues">Blues</option>
@@ -75,10 +83,19 @@
     <tests>
         <!-- Run test with: planemo test plotInterpolationMap.xml - -test_output=plotInterpolationMap.html -->
         <test>
-            <param name="data_observations" value="plotInterpolationMap_test_input1.csv"/>
+            <param name="observations_csv" value="plotInterpolationMap_test_input1.csv"/>
+            <param name="latitude_column" value="3"/>
+            <param name="longitude_column" value="4"/>
+            <param name="observations_column" value="5"/>
             <param name="study_area" value="plotInterpolationMap_test_input2.geojson"/>
             <param name="idw_power" value="2"/>
-            <param name="sample_points" value="5000"/>
+            <param name="sample_points" value="50000"/>
+            <param name="sample_type" value="regular"/>
+            <param name="legend_label" value="Legend"/>
+            <param name="legend_position" value="FALSE"/>
+            <param name="number_classes" value="10"/>
+            <param name="dot_size" value="1"/>
+            <param name="color_type" value="RdBu"/>
             <param name="test_case" value="true"/>
             <output name="output" file="plotInterpolationMap_test_output.png"/>
         </test>
