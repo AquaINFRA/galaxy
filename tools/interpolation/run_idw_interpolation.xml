@@ -12,19 +12,19 @@
     <command detect_errors='exit_code'><![CDATA[
     Rscript '$__tool_directory__/run_idw_interpolation.R'
         --observationsCsv '$observations_csv'
-        --latitudeColumn $latitude_column
-        --longitudeColumn $longitude_column
-        --observationsColumn $observations_column 
+        --latitudeColumn '$latitude_column'
+        --longitudeColumn '$longitude_column'
+        --observationsColumn '$observations_column' 
         --studyArea '$study_area'
-        --idwPower $idw_power 
-        --samplePoints $sample_points 
-        --sampleType $sample_type
+        --idwPower '$idw_power' 
+        --samplePoints '$sample_points' 
+        --sampleType '$sample_type'
         --legendLabel '$legend_label'
-        --legendPosition $legend_position
-        --numberClasses $number_classes
-        --dotSize $dot_size
-        --colorType $color_type
-        --testCase $test_case  
+        --legendPosition '$legend_position'
+        --numberClasses '$number_classes'
+        --dotSize '$dot_size'
+        --colorType '$color_type'
+        --testCase '$test_case'  
         --outputData '$output'
     ]]></command>
     <inputs>
@@ -78,7 +78,7 @@
         <data name="output" format="png" />
     </outputs>
     <tests>
-        <!-- Run test with: planemo test --biocontainers plotInterpolationMap.xml - -test_output=plotInterpolationMap.html -->
+        <!-- Run test with: planemo test - -biocontainers plotInterpolationMap.xml - -test_output=plotInterpolationMap.html -->
         <test>
             <param name="observations_csv" value="run_idw_interpolation_test_input1.csv"/>
             <param name="latitude_column" value="3"/>
@@ -111,18 +111,7 @@
             }
         </citation>
         <citation type="doi">10.32614/RJ-2018-009</citation>
-        <citation type="bibtex">
-            @Article{tmap,
-                title = {{tmap}: Thematic Maps in {R}},
-                author = {Martijn Tennekes},
-                journal = {Journal of Statistical Software},
-                year = {2018},
-                volume = {84},
-                number = {6},
-                pages = {1--39},
-                doi = {10.18637/jss.v084.i06},
-            }
-        </citation>
+        <citation type="doi">10.18637/jss.v084.i06</citation>
         <citation type="bibtex">
             @Manual{rcb,
                 title = {RColorBrewer: ColorBrewer Palettes},
@@ -141,17 +130,6 @@
                 url = {https://CRAN.R-project.org/package=raster},
             }
         </citation>
-        <citation type="bibtex">
-            @Article{gstat,
-                title = {Spatio-Temporal Interpolation using gstat},
-                author = {Benedikt Gräler and Edzer Pebesma and Gerard Heuvelink},
-                year = {2016},
-                journal = {The R Journal},
-                volume = {8},
-                issue = {1},
-                pages = {204-218},
-                url = {https://journal.r-project.org/archive/2016/RJ-2016-014/index.html},
-            }
-        </citation>
+        <citation type="doi">10.32614/RJ-2016-014</citation>
     </citations>
 </tool>
