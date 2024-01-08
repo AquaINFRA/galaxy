@@ -1,35 +1,54 @@
 library("getopt")
 library("imager")
 library("magrittr")
+library("magick")
 
 args = commandArgs(trailingOnly=TRUE)
 option_specification = matrix(c(
     'figure1', 'i1', 1, 'character',
     'figure2', 'i2', 1, 'character',
     'output', 'o', 2, 'character'
-), byrow=TRUE, ncol=4);
-options = getopt(option_specification);
+), byrow=TRUE, ncol=4)
+options = getopt(option_specification)
 
 cat("\n figure1", options$figure1)
 cat("\n figure2", options$figure2)
-#cat("\n output: ", options$output)
+
+# Function to compare two images pixel-wise and output a difference image
 compareImages <- function(image1_path, image2_path, output_path) {
-  img1 <- load.image(image1_path)
-  img2 <- load.image(image2_path)
-  
-  if (any(dim(img1) != dim(img2))) {
+  img1 <- image_read(image1_path)
+  img2 <- image_read(image2_path)
+
+  # Convert images to imager format for pixel-wise absolute difference
+  img1_array <- as.array(img1)
+  img2_array <- as.array(img2)
+
+  img1_imager <- cimg(img1_array)
+  img2_imager <- cimg(img2_array)
+
+  if (any(dim(img1_imager) != dim(img2_imager))) {
     stop("Both images must have the same dimensions.")
   }
-  
-  diff_img <- abs(img1 - img2)
-  
-  save.image(diff_img, output_path)
-  
+
+  # Compute pixel-wise absolute difference using imager
+  diff_img_imager <- abs(img1_imager - img2_imager)
+
+  # Save the difference image as a temporary file
+  temp_file <- tempfile(fileext = ".png")
+  save.image(diff_img_imager, temp_file)
+
+  # Read the difference image using magick
+  diff_img_magick <- image_read(temp_file)
+
+  # Save the difference image
+  image_write(diff_img_magick, output_path)
+
+  # Display the images
   par(mfrow = c(1, 3))
   plot(img1, main = "Image 1")
   plot(img2, main = "Image 2")
-  plot(diff_img, main = "Difference Image")
-  
+  plot(diff_img_magick, main = "Difference Image")
+
   par(mfrow = c(1, 1))
 }
 
