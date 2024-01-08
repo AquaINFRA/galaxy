@@ -10,9 +10,11 @@
         <exit_code range="1:" level="fatal" description="Error occurred. Please check Tool: Create Spatial Points Dataframe"/>
     </stdio>
     <command><![CDATA[
-        Rscript $__tool_directory__/createSpatialPointsDataFrame.R --dataPoints $data_points --outputData $output
+        Rscript $__tool_directory__/createSpatialPointsDataFrame.R --dataPoints $data_points --latitudeColumnName $latitude_column_name --longitudeColumnName $longitude_column_name --outputData $output
     ]]></command>
     <inputs>
+        <param type="text" name="latitude_column_name" label="What is the name of the column containing the latitude?"/>
+        <param type="text" name="longitude_column_name" label="What is the name of the column containing the longitude?"/>
         <param type="data" format="csv" name="data_points" label="Observations as csv"/>
     </inputs>
     <outputs>
@@ -22,6 +24,8 @@
         <!-- Run test with: planemo test createSpatialPointsDataFrame.xml - -test_output=createSpatialPointsDf_test_output.html -->
         <test>
             <param name="data_points" value="spatialPointsDf_testdata_input.csv"/>
+            <param name="latitude_column_name" value="latitude"/>
+            <param name="longitude_column_name" value="longitude"/>
             <!-- lines_diff is needed because Galaxy changes the name property of the geopjson dynamically.-->
             <output name="output" file="spatialPointsDf_testdata_output.geojson" lines_diff="2"/>
         </test> 
