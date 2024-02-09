@@ -1,0 +1,41 @@
+<tool id="otb_band_math" name="OTB.BandMath" version="0.1.0">
+    <description> Outputs a monoband image which is the result of a mathematical operation on several multi-band images.</description>
+    <stdio>
+        <exit_code range="1:" />
+    </stdio>
+    <requirements>
+        <requirement type="package" version="4.1.2">R</requirement>
+        <requirement type="package" version="0.2.3">httr2</requirement>
+        <requirement type="package" version="1.2.0">getopt</requirement>
+        <requirement type="package" version="1.8.7">jsonlite</requirement>
+    </requirements>
+    <command><![CDATA[
+        Rscript /home/markus/Documents/aquainfra/galaxy/tools/ogc_services/OTB_BandMath.R --url $url --outputData $output_data
+    ]]>
+    </command>
+    <inputs>
+        <param type="text" name="url" label="URL"/>
+    </inputs>
+    <outputs>
+        <data name="output_data" format="jpeg" />
+    </outputs>
+    <tests>
+        <test>
+            <!--<output name="galaxy_output" file="/galaxy/tools/mytools/test_data/test_output.txt"/>-->
+        </test>
+    </tests>
+    <help><![CDATA[
+        This application performs a mathematical operation on several multi-band images and outputs the result into a monoband image. The given expression is computed at each pixel position. Evaluation of the mathematical formula is done by the muParser libraries.The formula can be written using:  * numerical values ( 2.3, -5, 3.1e4, ...)  * variables containing pixel values (e.g. : 'im2b3' is the pixel value in 2nd image, 3rd band)  * binary operators:    * '+' addition, '-' subtraction, '*' multiplication, '/' division    * '^' raise x to the power of y    * '.
+    ]]></help>
+    <citations>
+        <citation type="bibtex">
+            @Manual{,
+                title = {httr2: Perform HTTP Requests and Process the Responses},
+                author = {Hadley Wickham},
+                year = {2023},
+                note = {R package version 0.2.3},
+                url = {https://CRAN.R-project.org/package=httr2},
+            }
+        </citation>
+    </citations>
+</tool>
