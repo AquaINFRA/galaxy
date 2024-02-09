@@ -1,10 +1,9 @@
-<tool id="aquainfra_ddas" name="AquaINFRA DDAS" tool_type="data_source" version="1.0">
-    <description>Tool to download content from AquaINFRA's DDAS.</description>
+<tool id="aquainfra_ddas" name="AquaINFRA DDAS Importer" tool_type="data_source" version="1.0">
+    <description>downloads content from AquaINFRA's DDAS.</description>
     <command><![CDATA[
-        python '$__tool_directory__/data_source.py' '$output' $__app__.config.output_size_limit && unzip -l '$output'
+        python '$__tool_directory__/data_source.py' '$output' $__app__.config.output_size_limit '$output'
     ]]></command>
-    <inputs action="http://archaea.ucsc.edu/cgi-bin/hgTables" check_values="false" method="get">
-        <display>go to UCSC Table Browser $GALAXY_URL</display>
+    <inputs action="http://localhost:5173/" check_values="false" method="get">
         <param name="GALAXY_URL" type="baseurl" value="/tool_runner" />
         <param name="tool_id" type="hidden" value="aquainfra_ddas" />
     </inputs>
