@@ -1,0 +1,16 @@
+<tool id="import_from_osf" name="Open Sciene Framework Importer" tool_type="data_source" version="1.0">
+    <description>downloads content from osf.io.</description>
+    <command><![CDATA[
+        python '$__tool_directory__/data_source.py' '$output' $__app__.config.output_size_limit '$output'
+    ]]></command>
+    <inputs action="https://osf.io/" check_values="false" method="get">
+        <param name="GALAXY_URL" type="baseurl" value="/tool_runner" />
+        <param name="tool_id" type="hidden" value="aquainfra_ddas" />
+    </inputs>
+    <outputs>
+        <data name="output" format="zip" label=""/>
+    </outputs>
+    <!--
+        http://127.0.0.1:8080/tool_runner?tool_id=import_from_osf&URL=https://files.osf.io/v1/resources/p8z4w/providers/osfstorage/?zip=
+    -->
+</tool>
