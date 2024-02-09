@@ -14,7 +14,9 @@
     ]]>
     </command>
     <inputs>
-        <param type="text" name="url" label="URL"/>
+        <param type="text" name="url" label="URL to a .tif file" optional="false" help="Use, for example, http://geolabs.fr/dl/Landsat8Extract1.tif">
+            <validator type="regex" message="Input is not a proper URL">^(http|https):\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,}(\/\S*)?$</validator>
+        </param>
     </inputs>
     <outputs>
         <data name="output_data" format="jpeg" />
