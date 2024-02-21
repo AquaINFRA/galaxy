@@ -1,5 +1,5 @@
 <tool id="otb_band_math" name="OTB.BandMath" version="0.1.0">
-    <description> Outputs a monoband image which is the result of a mathematical operation on several multi-band images.</description>
+    <description> outputs a monoband image as a result of a mathematical operation on several multi-band images.</description>
     <stdio>
         <exit_code range="1:" />
     </stdio>
@@ -10,7 +10,7 @@
         <requirement type="package" version="1.8.7">jsonlite</requirement>
     </requirements>
     <command><![CDATA[
-        Rscript /home/markus/Documents/aquainfra/galaxy/tools/ogc_services/OTB_BandMath.R --url $url --outputData $output_data
+        Rscript $__tool_directory__/OTB_BandMath.R --url $url --outputData $output_data
     ]]>
     </command>
     <inputs>

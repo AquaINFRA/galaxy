@@ -9,8 +9,9 @@
     <tool file="interpolation/run_idw_interpolation.xml"></tool>
     <tool file="interpolation/compareFigures.xml"></tool>
   </section>
-    <section name="OGC Services" id="ogc_service">
+  <section name="OGC Services" id="ogc_service">
     <tool file="ogc_services/OTB_BandMath.xml" />
+    <tool file="ogc_services/OTB_MeanShiftSmooting.xml" />
   </section>
   <section id="getext" name="Get Data">
     <tool file="data_source/aquainfra_ddas.xml" />
