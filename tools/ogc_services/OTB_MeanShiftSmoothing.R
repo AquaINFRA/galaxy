@@ -1,4 +1,4 @@
-#Run with Rscript ./request_otb_mean_shift_smoothing.R --url http://geolabs.fr/dl/Landsat8Extract1.tif --outputType png (or tiff)
+#Run with Rscript ./OTB_MeanShiftSmoothing.R --url http://geolabs.fr/dl/Landsat8Extract1.tif --outputType png --outputFormat download --outputData test.png
 
 library("httr2")
 library("jsonlite")
@@ -8,14 +8,24 @@ args <- commandArgs(trailingOnly = TRUE)
 option_specification <- matrix(c(
   'url', 'i1', 1, 'character',
   'outputType', 'i2', 2, 'character',
+  'outputFormat', 'i3', 3, 'character',
   'outputData', 'o', 2, 'character'
 ), byrow = TRUE, ncol = 4)
 options <- getopt(option_specification)
 
-outputType <- paste0("image/", options$outputType)
+url <- options$url
+#if (grepl("\\.txt$", url)) {
+#  url_content <- readLines(url)
+#  url <- url_content
+#}
 
-cat("out: ",options$outputType)
-cat("\n url: ",options$url)
+outputType <- paste0("image/", options$outputType)
+outputFormat <- options$outputFormat
+outputData <- options$outputData
+
+cat("url: ", url)
+cat("\n outputType: ", outputType)
+cat("\n outputFormat: ", outputFormat)
 
 baseUrl <- "https://ospd.geolabs.fr:8300/ogc-api/"
 execute <- "processes/OTB.MeanShiftSmoothing/execution"
@@ -25,7 +35,7 @@ getResult <- "/results"
 json_data <- list(
   "inputs" = list(
     "in" = list(
-        "href" = options$url
+        "href" = url
     ),
     "fout" = "float",
     "foutpos" = "float",
@@ -89,6 +99,7 @@ tryCatch({
       status_code2 <- resp2$status_code
       if (status_code2 == 200) {
         response2 <- makeResponseBodyReadable(resp2$body)
+        cat("\n", response2$status )
         if (response2$status=="successful") {
           status <- "successful"
           #Request 3
@@ -100,7 +111,11 @@ tryCatch({
           status_code3 <- resp3$status_code
           if (status_code3 == 200) {
             response3 <- makeResponseBodyReadable(resp3$body)
-            download.file(response3$fout$href, destfile = options$outputData, mode = "wb")
+            if (outputFormat == "download") {
+              download.file(response3$fout$href, destfile = outputData, mode = "wb")              
+            } else if (outputFormat == "getUrl") {
+              writeLines(response3$fout$href, con = outputData)
+            }
           } else if (status_code3 == 404) {
             print("The requested URI was not found.")
           } else if (status_code3 == 500) {
@@ -110,7 +125,7 @@ tryCatch({
           }
         } else {
           attempt <- attempt +1
-          if (attempt == 12) {
+          if (attempt == 200) {
             status <- "failed"          
           }
         }        

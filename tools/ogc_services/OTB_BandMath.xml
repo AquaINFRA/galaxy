@@ -10,16 +10,37 @@
         <requirement type="package" version="1.8.7">jsonlite</requirement>
     </requirements>
     <command><![CDATA[
-        Rscript $__tool_directory__/OTB_BandMath.R --url $url --outputData $output_data
+        Rscript $__tool_directory__/OTB_BandMath.R --url $url --processingMemory $processing_memory --mathExpression $math_expression --outputType $output_type --outputFormat $output_format --outputData $output_data    
     ]]>
     </command>
     <inputs>
-        <param type="text" name="url" label="URL to a .tif file" optional="false" help="Use, for example, http://geolabs.fr/dl/Landsat8Extract1.tif">
+        <param type="text" name="url" label="URL to a .tif file" optional="false" help="Use, for example, https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/31/U/ET/2019/4/S2B_31UET_20190421_0_L2A/TCI.tif">
             <validator type="regex" message="Input is not a proper URL">^(http|https):\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,}(\/\S*)?$</validator>
+        </param>
+        <param type="select" name="processing_memory" label="Available memory for processing (in MB)">
+            <option value="256">256</option>
+            <option value="512">512</option> <!--how to make it integer?-->
+            <option value="1024">1024</option>
+        </param>
+        <param type="text" name="math_expression" label="The muParser mathematical expression to apply on input images" optional="false" help="Use, for example, im1b3,im1b2,im1b1"/>
+        <param type="select" name="output_type" label="Output format of the image">
+            <option value="png">.png</option>
+            <option value="tiff">.tiff</option>
+            <option value="jpeg">.jpeg</option>
+        </param>
+        <param type="select" name="output_format" label="Do you want to download the result to your Galaxy history or get the URL?">
+            <option value="download">Download</option>
+            <option value="getUrl">Get URL</option>
         </param>
     </inputs>
     <outputs>
-        <data name="output_data" format="jpeg" />
+        <data name="output_data" format="png">
+            <change_format>
+                <when input="output_format" value="getUrl" format="txt" />
+                <when input="output_type" value="tiff" format="tiff" />
+                <when input="output_type" value="jpeg" format="jpeg" />
+            </change_format>
+        </data>
     </outputs>
     <tests>
         <test>

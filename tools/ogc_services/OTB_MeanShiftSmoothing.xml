@@ -10,22 +10,30 @@
         <requirement type="package" version="1.8.7">jsonlite</requirement>
     </requirements>
     <command><![CDATA[
-        Rscript $__tool_directory__/OTB_MeanShiftSmoothing.R --url $url --outputType $output_type --outputData $output_data
+        Rscript $__tool_directory__/OTB_MeanShiftSmoothing.R --url $url --outputType $output_type --outputFormat $output_format --outputData $output_data
     ]]>
     </command>
     <inputs>
-        <param type="text" name="url" label="URL to a .tif file" optional="false" help="Use, for example, http://geolabs.fr/dl/Landsat8Extract1.tif" />
-        <param type="select" name="output_type" label="image format" optional="false">
+        <param type="text" name="url" label="URL to a .tif file" optional="false" help="Use, for example, http://geolabs.fr/dl/Landsat8Extract1.tif">
+            <sanitizer sanitize="False"/>
+        </param>
+        <param type="select" name="output_type" label="Output format of the image">
             <option value="png">.png</option>
             <option value="tiff">.tiff</option>
             <option value="jpeg">.jpeg</option>
+        </param>
+        <param type="select" name="output_format" label="Do you want to download the result to your Galaxy history or get the URL?">
+            <option value="download">Download</option>
+            <option value="getUrl">Get URL</option>
         </param>
     </inputs>
     <outputs>
         <data name="output_data" format="png">
             <change_format>
+                <when input="output_format" value="getUrl" format="txt" />
                 <when input="output_type" value="tiff" format="tiff" />
                 <when input="output_type" value="jpeg" format="jpeg" />
+                <when input="output_format" value="getUrl" format="txt" />
             </change_format>
         </data>
     </outputs>
