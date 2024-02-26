@@ -10,13 +10,14 @@
         <requirement type="package" version="1.8.7">jsonlite</requirement>
     </requirements>
     <command><![CDATA[
-        Rscript $__tool_directory__/OTB_BandMath.R --url $url --processingMemory $processing_memory --mathExpression $math_expression --outputType $output_type --outputFormat $output_format --outputData $output_data    
+        Rscript $__tool_directory__/OTB_BandMath.R --file $file --processingMemory $processing_memory --mathExpression $math_expression --outputType $output_type --outputFormat $output_format --outputData $output_data    
     ]]>
     </command>
     <inputs>
-        <param type="text" name="url" label="URL to a .tif file" optional="false" help="Use, for example, https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/31/U/ET/2019/4/S2B_31UET_20190421_0_L2A/TCI.tif">
+        <param type="data" format="txt" name="file" label="txt" />
+        <!--<param type="text" name="url" label="URL to a .tif file" optional="false" help="Use, for example, https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/31/U/ET/2019/4/S2B_31UET_20190421_0_L2A/TCI.tif">
             <validator type="regex" message="Input is not a proper URL">^(http|https):\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,}(\/\S*)?$</validator>
-        </param>
+        </param>-->
         <param type="select" name="processing_memory" label="Available memory for processing (in MB)">
             <option value="256">256</option>
             <option value="512">512</option> <!--how to make it integer?-->

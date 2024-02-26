@@ -6,7 +6,8 @@ library("getopt")
 
 args <- commandArgs(trailingOnly = TRUE)
 option_specification <- matrix(c(
-  'url', 'i1', 1, 'character',
+  #'url', 'i1', 1, 'character',
+  'file', 'i1', 1, 'character',
   'processingMemory', 'i2', 2, 'character',
   'mathExpression', 'i3', 2, 'character',
   'outputType', 'i4', 2, 'character',
@@ -15,14 +16,16 @@ option_specification <- matrix(c(
 ), byrow = TRUE, ncol = 4)
 options <- getopt(option_specification)
 
-url <- options$url
+#url <- options$url
+file <- options$file
 processingMemory <- options$processingMemory
 mathExpression <-options$mathExpression
 outputType <- paste0("image/", options$outputType)
 outputFormat <- options$outputFormat
 outputData <- options$outputData
 
-cat("\n url: ",url)
+#cat("\n url: ",url)
+cat("\n file: ",file)
 cat("\n ram: ",processingMemory)
 cat("\n exp: ",mathExpression)
 cat("\n outputType: ",outputType)
@@ -32,6 +35,8 @@ baseUrl <- "https://ospd.geolabs.fr:8300/ogc-api/"
 execute <- "processes/OTB.BandMath/execution"
 getStatus <- "jobs/"
 getResult <- "/results"
+
+url <- readLines(file, warn = FALSE)
 
 json_data <- list(
   "inputs" = list(

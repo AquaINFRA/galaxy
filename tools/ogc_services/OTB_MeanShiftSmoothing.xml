@@ -10,13 +10,14 @@
         <requirement type="package" version="1.8.7">jsonlite</requirement>
     </requirements>
     <command><![CDATA[
-        Rscript $__tool_directory__/OTB_MeanShiftSmoothing.R --url $url --outputType $output_type --outputFormat $output_format --outputData $output_data
+        Rscript $__tool_directory__/OTB_MeanShiftSmoothing.R --file $file --outputType $output_type --outputFormat $output_format --outputData $output_data
     ]]>
     </command>
     <inputs>
-        <param type="text" name="url" label="URL to a .tif file" optional="false" help="Use, for example, http://geolabs.fr/dl/Landsat8Extract1.tif">
+        <param type="data" format="txt" name="file" label="txt" />
+        <!--<param type="text" name="url" label="URL to a .tif file" optional="false" help="Use, for example, http://geolabs.fr/dl/Landsat8Extract1.tif">
             <sanitizer sanitize="False"/>
-        </param>
+        </param>-->
         <param type="select" name="output_type" label="Output format of the image">
             <option value="png">.png</option>
             <option value="tiff">.tiff</option>

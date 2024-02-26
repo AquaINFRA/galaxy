@@ -6,14 +6,16 @@ library("getopt")
 
 args <- commandArgs(trailingOnly = TRUE)
 option_specification <- matrix(c(
-  'url', 'i1', 1, 'character',
+  #'url', 'i1', 1, 'character',
+  'file', 'i1', 1, 'character',
   'outputType', 'i2', 2, 'character',
   'outputFormat', 'i3', 3, 'character',
   'outputData', 'o', 2, 'character'
 ), byrow = TRUE, ncol = 4)
 options <- getopt(option_specification)
 
-url <- options$url
+#url <- options$url
+file <- options$file
 #if (grepl("\\.txt$", url)) {
 #  url_content <- readLines(url)
 #  url <- url_content
@@ -23,7 +25,8 @@ outputType <- paste0("image/", options$outputType)
 outputFormat <- options$outputFormat
 outputData <- options$outputData
 
-cat("url: ", url)
+#cat("url: ", url)
+cat("\n file: ",file)
 cat("\n outputType: ", outputType)
 cat("\n outputFormat: ", outputFormat)
 
@@ -31,6 +34,8 @@ baseUrl <- "https://ospd.geolabs.fr:8300/ogc-api/"
 execute <- "processes/OTB.MeanShiftSmoothing/execution"
 getStatus <- "jobs/"
 getResult <- "/results"
+
+url <- readLines(file, warn = FALSE)
 
 json_data <- list(
   "inputs" = list(
