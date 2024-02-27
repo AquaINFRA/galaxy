@@ -12,6 +12,7 @@
   <section name="OGC Services" id="ogc_service">
     <tool file="ogc_services/OTB_BandMath.xml" />
     <tool file="ogc_services/OTB_MeanShiftSmoothing.xml" />
+    <tool file="ogc_services/test.xml" />
   </section>
   <section id="getext" name="Get Data">
     <tool file="data_source/aquainfra_ddas.xml" />

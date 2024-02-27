@@ -1,4 +1,4 @@
-#Run with Rscript ./OTB_BandMath.R --url http://geolabs.fr/dl/Landsat8Extract1.tif --outputType png --outputFormat download --outputData test.png
+#Run with Rscript ./OTB_BandMath.R --file otb_band_math_test_input.txt --processingMemory 256 --mathExpression im1b3,im1b2,im1b1 --outputType png --outputFormat download --outputData otb_band_math_test_output.png
 
 library("httr2")
 library("jsonlite")
@@ -6,7 +6,6 @@ library("getopt")
 
 args <- commandArgs(trailingOnly = TRUE)
 option_specification <- matrix(c(
-  #'url', 'i1', 1, 'character',
   'file', 'i1', 1, 'character',
   'processingMemory', 'i2', 2, 'character',
   'mathExpression', 'i3', 2, 'character',
@@ -16,15 +15,13 @@ option_specification <- matrix(c(
 ), byrow = TRUE, ncol = 4)
 options <- getopt(option_specification)
 
-#url <- options$url
 file <- options$file
-processingMemory <- options$processingMemory
+processingMemory <- as.numeric(options$processingMemory)
 mathExpression <-options$mathExpression
 outputType <- paste0("image/", options$outputType)
 outputFormat <- options$outputFormat
 outputData <- options$outputData
 
-#cat("\n url: ",url)
 cat("\n file: ",file)
 cat("\n ram: ",processingMemory)
 cat("\n exp: ",mathExpression)
@@ -36,13 +33,17 @@ execute <- "processes/OTB.BandMath/execution"
 getStatus <- "jobs/"
 getResult <- "/results"
 
+file_urls <- readLines(file, warn = FALSE)
+
+il_list <- lapply(file_urls, function(url) {
+  list("href" = url)
+})
+
 url <- readLines(file, warn = FALSE)
 
 json_data <- list(
   "inputs" = list(
-    "il" = list(
-        "href" = url
-    ),
+    "il" = il_list,
     "out" = "float",
     "exp" = mathExpression,
     "ram" = processingMemory
@@ -85,14 +86,14 @@ tryCatch({
     attempt = 1
     while (status == "running") {
       #Request 2
-      cat("\n",response$jobID)
+      #cat("\n",response$jobID)
       resp2 <- request(paste0(baseUrl,getStatus,response$jobID)) %>%
         req_headers(
           'accept' = 'application/json'
         ) %>%
         req_perform()
       status_code2 <- resp2$status_code
-      cat("\n", status_code2)
+      #cat("\n", status_code2)
       if (status_code2 == 200) {
         response2 <- makeResponseBodyReadable(resp2$body)
         cat("\n", response2$status)
@@ -119,7 +120,10 @@ tryCatch({
           } else {
             print(paste("HTTP", status_code3, "Error:", resp3$status_message))
           }
-        } else {
+        } else if (response2$status=="failed") {
+          status <- "failed"
+        }
+         else {
           attempt <- attempt +1
           if (attempt == 200) {
             status <- "failed"          
