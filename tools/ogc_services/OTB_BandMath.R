@@ -42,8 +42,6 @@ il_list <- lapply(file_urls, function(url) {
   list("href" = url)
 })
 
-url <- readLines(file, warn = FALSE)
-
 json_data <- list(
   "inputs" = list(
     "il" = il_list,
