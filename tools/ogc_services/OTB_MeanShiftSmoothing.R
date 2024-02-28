@@ -1,4 +1,4 @@
-#Run with Rscript ./OTB_MeanShiftSmoothing.R --url http://geolabs.fr/dl/Landsat8Extract1.tif --outputType png --outputFormat download --outputData test.png
+#Run with Rscript ./OTB_MeanShiftSmoothing.R --file otb_band_math_test_input.txt --fOut float --fOutpos float --processingMemory 1024 --spatialR 5 --rangeR 15 --thresHold 0.1 --maxIter 100 --rangeRamp 0 --modeSearch False --outputType png --outputFormat download --outputData1 test1.png --outputData2 test2.png
 
 library("httr2")
 library("jsonlite")
@@ -6,27 +6,48 @@ library("getopt")
 
 args <- commandArgs(trailingOnly = TRUE)
 option_specification <- matrix(c(
-  #'url', 'i1', 1, 'character',
   'file', 'i1', 1, 'character',
-  'outputType', 'i2', 2, 'character',
-  'outputFormat', 'i3', 3, 'character',
-  'outputData', 'o', 2, 'character'
+  'fOut', 'i2', 1, 'character',
+  'fOutpos', 'i3', 1, 'character',
+  'processingMemory', 'i4', 1, 'character',
+  'spatialR', 'i5', 1, 'character',
+  'rangeR', 'i6', 1, 'character',
+  'thresHold', 'i7', 1, 'character',
+  'maxIter', 'i8', 1, 'character',
+  'rangeRamp', 'i9', 1, 'character',
+  'modeSearch', 'i10', 1, 'character',
+  'outputType', 'i11', 2, 'character',
+  'outputFormat', 'i12', 3, 'character',
+  'outputData1', 'o1', 2, 'character',
+  'outputData2', 'o2', 2, 'character'
 ), byrow = TRUE, ncol = 4)
 options <- getopt(option_specification)
 
-#url <- options$url
 file <- options$file
-#if (grepl("\\.txt$", url)) {
-#  url_content <- readLines(url)
-#  url <- url_content
-#}
-
+fout <- options$fOut
+foutpos <- options$fOutpos
+processingMemory <- as.numeric(options$processingMemory)
+spatialr <- options$spatialR
+ranger <- options$rangeR
+threshold <- options$thresHold
+maxiter <- options$maxIter
+rangeramp <- options$rangeRamp
+modesearch <- options$modeSearch
 outputType <- paste0("image/", options$outputType)
 outputFormat <- options$outputFormat
-outputData <- options$outputData
+outputData1 <- options$outputData1
+outputData2 <- options$outputData2
 
-#cat("url: ", url)
-cat("\n file: ",file)
+cat("\n file: ", file)
+cat("\n fout: ", fout)
+cat("\n foutpos: ", foutpos)
+cat("\n processingMemory: ", processingMemory)
+cat("\n spatialr: ", spatialr)
+cat("\n ranger: ", ranger)
+cat("\n threshold: ", threshold)
+cat("\n maxiter: ", maxiter)
+cat("\n rangeramp: ", rangeramp)
+cat("\n modesearch: ", modesearch)
 cat("\n outputType: ", outputType)
 cat("\n outputFormat: ", outputFormat)
 
@@ -35,22 +56,24 @@ execute <- "processes/OTB.MeanShiftSmoothing/execution"
 getStatus <- "jobs/"
 getResult <- "/results"
 
-url <- readLines(file, warn = FALSE)
+file_urls <- readLines(file, warn = FALSE)
+
+il_list <- lapply(file_urls, function(url) {
+  list("href" = url)
+})
 
 json_data <- list(
   "inputs" = list(
-    "in" = list(
-        "href" = url
-    ),
-    "fout" = "float",
-    "foutpos" = "float",
-    "ram" = "1024",
-    "spatialr" = "5",
-    "ranger" = "15",
-    "thres" = "0.1",
-    "maxiter" = "100",
-    "rangeramp" = "0",
-    "modesearch" = "False"
+    "in" = il_list,
+    "fout" = fout,
+    "foutpos" = foutpos,
+    "ram" = processingMemory,
+    "spatialr" = spatialr,
+    "ranger" = ranger,
+    "thres" = threshold,
+    "maxiter" = maxiter,
+    "rangeramp" = rangeramp,
+    "modesearch" = modesearch
   ),
   "outputs" = list(
     "fout" = list(
@@ -61,7 +84,7 @@ json_data <- list(
     ),
     "foutpos" = list(
       "format" = list(
-        "mediaType" = "image/tiff"
+        "mediaType" = outputType
       ),
       "transmissionMode"= "reference"
     )
@@ -117,9 +140,10 @@ tryCatch({
           if (status_code3 == 200) {
             response3 <- makeResponseBodyReadable(resp3$body)
             if (outputFormat == "download") {
-              download.file(response3$fout$href, destfile = outputData, mode = "wb")              
+              download.file(response3$fout$href, destfile = outputData1, mode = "wb")
+              download.file(response3$fout$href, destfile = outputData2, mode = "wb")              
             } else if (outputFormat == "getUrl") {
-              writeLines(response3$fout$href, con = outputData)
+              writeLines(paste(response3$fout$href, response3$foutpos$href, sep = "\n"), con = outputData1)
             }
           } else if (status_code3 == 404) {
             print("The requested URI was not found.")
@@ -128,7 +152,10 @@ tryCatch({
           } else {
             print(paste("HTTP", status_code3, "Error:", resp3$status_message))
           }
-        } else {
+        } else if (response2$status=="failed") {
+          status <- "failed"
+        } 
+         else {
           attempt <- attempt +1
           if (attempt == 200) {
             status <- "failed"          
