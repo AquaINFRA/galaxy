@@ -11,7 +11,8 @@
             Rscript '$__tool_directory__/OTB_BandMath.R' 
                 --file '$file' 
                 --processingMemory '$processing_memory' 
-                --mathExpression '$math_expression' 
+                --mathExpression '$math_expression'
+                --outputImage '$output_image' 
                 --outputType '$output_type' 
                 --outputFormat '$output_format' 
                 --outputData '$output_data'    
@@ -19,13 +20,21 @@
     </command>
     <inputs>
         <param type="data" format="txt" name="file" label="Image-list of operands to the mathematical expression (.txt file)" />
-        <param type="select" name="processing_memory" label="Available memory for processing (in MB)" help="Further options are 512 and 1024">
+        <param type="select" name="processing_memory" label="Available memory for processing (in MB)">
             <option value="256">256</option>
             <option value="512">512</option>
             <option value="1024">1024</option>
         </param>
         <param type="text" name="math_expression" label="The muParser mathematical expression to apply on input images" optional="false" value="im1b3,im1b2,im1b1"/>
-        <param type="select" name="output_type" label="Output image which is the result of the mathematical expressions on input image-list operands">
+        <param type="select" name="output_image" label="Output image which is the result of the mathematical expressions on input image-list operands">
+            <option value="float">float</option>
+            <option value="uint8">uint8</option>
+            <option value="uint16">uint16</option>
+            <option value="int16">int16</option>
+            <option value="int32">int32</option>
+            <option value="double">double</option>
+        </param>
+        <param type="select" name="output_type" label="Output image format">
             <option value="png">.png</option>
             <option value="tiff">.tiff</option>
             <option value="jpeg">.jpeg</option>
@@ -50,6 +59,7 @@
             <param name="processing_memory" value="256"/>
             <param name="math_expression" value="im1b3,im1b2,im1b1"/>
             <param name="output_type" value="png"/>
+            <param name="output_image" value="float"/>
             <param name="output_format" value="download"/>
             <output name="output_data" file="otb_band_math_test_output.png" compare="sim_size" delta_frac="0.1" />
         </test>

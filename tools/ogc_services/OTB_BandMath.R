@@ -11,6 +11,7 @@ option_specification <- matrix(c(
   'mathExpression', 'i3', 2, 'character',
   'outputType', 'i4', 2, 'character',
   'outputFormat', 'i5', 3, 'character',
+  'outputImage', 'i6', 3, 'character',
   'outputData', 'o', 2, 'character'
 ), byrow = TRUE, ncol = 4)
 options <- getopt(option_specification)
@@ -20,15 +21,17 @@ processingMemory <- as.numeric(options$processingMemory)
 mathExpression <-options$mathExpression
 outputType <- paste0("image/", options$outputType)
 outputFormat <- options$outputFormat
+outputImage <- options$outputImage
 outputData <- options$outputData
 
-cat("\n file: ",file)
-cat("\n ram: ",processingMemory)
-cat("\n exp: ",mathExpression)
-cat("\n outputType: ",outputType)
-cat("\n outputFormat: ",outputFormat)
+cat("\n file: ", file)
+cat("\n ram: ", processingMemory)
+cat("\n exp: ", mathExpression)
+cat("\n outputType: ", outputType)
+cat("\n outputFormat: ", outputFormat)
+cat("\n outputFormat: ", outputImage)
 
-baseUrl <- "https://ospd.geolabs.fr:8300/ogc-api/"
+baseUrl <- "https://ospd.geolabs.fr:8300/ogc-api/" #change url or port if needed
 execute <- "processes/OTB.BandMath/execution"
 getStatus <- "jobs/"
 getResult <- "/results"
@@ -44,7 +47,7 @@ url <- readLines(file, warn = FALSE)
 json_data <- list(
   "inputs" = list(
     "il" = il_list,
-    "out" = "float",
+    "out" = outputImage,
     "exp" = mathExpression,
     "ram" = processingMemory
   ),
@@ -96,7 +99,7 @@ tryCatch({
       #cat("\n", status_code2)
       if (status_code2 == 200) {
         response2 <- makeResponseBodyReadable(resp2$body)
-        cat("\n", response2$status)
+        #cat("\n", response2$status)
         if (response2$status=="successful") {
           status <- "successful"
           #Request 3
