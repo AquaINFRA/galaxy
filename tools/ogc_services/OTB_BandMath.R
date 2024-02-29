@@ -31,7 +31,7 @@ cat("\n outputType: ", outputType)
 cat("\n outputFormat: ", outputFormat)
 cat("\n outputFormat: ", outputImage)
 
-baseUrl <- "https://ospd.geolabs.fr:8300/ogc-api/" #change url or port if needed
+baseUrl <- "https://ospd.geolabs.fr:8300/ogc-api/"
 execute <- "processes/OTB.BandMath/execution"
 getStatus <- "jobs/"
 getResult <- "/results"

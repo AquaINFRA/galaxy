@@ -1,4 +1,4 @@
-<tool id="otb_band_math" name="OTB.BandMath" version="1.0" profile="22.05">
+<tool id="otb_band_math" name="OTB.BandMath" version="1.0" ><!--add profile="22.05"-->
     <description> outputs a monoband image as a result of a mathematical operation on several multi-band images</description>
     <requirements>
         <requirement type="package" version="4.3.1">r-base</requirement>
@@ -19,14 +19,14 @@
         ]]>
     </command>
     <inputs>
-        <param type="data" format="txt" name="file" label="Image-list of operands to the mathematical expression (.txt file)" />
-        <param type="select" name="processing_memory" label="Available memory for processing (in MB)">
+        <param type="data" format="txt" name="file" label="List of images" help="Image-list of operands to the mathematical expression (.txt file, one per line)" />
+        <param type="select" name="processing_memory" label="Memory" help="Available memory for processing (in MB)">
             <option value="256">256</option>
             <option value="512">512</option>
             <option value="1024">1024</option>
         </param>
-        <param type="text" name="math_expression" label="The muParser mathematical expression to apply on input images" optional="false" value="im1b3,im1b2,im1b1"/>
-        <param type="select" name="output_image" label="Output image which is the result of the mathematical expressions on input image-list operands">
+        <param type="text" name="math_expression" label="muParser" optional="false" value="im1b3,im1b2,im1b1" help="The muParser mathematical expression to apply on input images"/>
+        <param type="select" name="output_image" label="Output image" help="Output image which is the result of the mathematical expressions on input image-list operands">
             <option value="float">float</option>
             <option value="uint8">uint8</option>
             <option value="uint16">uint16</option>
