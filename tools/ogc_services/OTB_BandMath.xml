@@ -20,12 +20,8 @@
     </command>
     <inputs>
         <param type="data" format="txt" name="file" label="List of images" help="Image-list of operands to the mathematical expression (.txt file, one per line)" />
-        <param type="select" name="processing_memory" label="Memory" help="Available memory for processing (in MB)">
-            <option value="256">256</option>
-            <option value="512">512</option>
-            <option value="1024">1024</option>
-        </param>
-        <param type="text" name="math_expression" label="muParser" optional="false" value="im1b3,im1b2,im1b1" help="The muParser mathematical expression to apply on input images"/>
+        <param type="integer" name="processing_memory" label="Random-Access Memory (RAM)" value="256" optional="true" help="Available memory for processing (in MB)" />
+        <param type="text" name="math_expression" label="muParser" optional="false" help="The muParser mathematical expression to apply on input images (e.g., 'im1b3,im1b2,im1b1'). See 'Help' for documentation."/>
         <param type="select" name="output_image" label="Output image" help="Output image which is the result of the mathematical expressions on input image-list operands">
             <option value="float">float</option>
             <option value="uint8">uint8</option>
@@ -34,12 +30,12 @@
             <option value="int32">int32</option>
             <option value="double">double</option>
         </param>
-        <param type="select" name="output_type" label="Output image format">
-            <option value="png">.png</option>
-            <option value="tiff">.tiff</option>
-            <option value="jpeg">.jpeg</option>
+        <param type="select" name="output_type" label="Output image format" help="Select .png for obtaining the response as an OGC web service. Select .tiff or .jpeg for using it in a workflow.">
+            <option value="png">.png (for OGC web services)</option>
+            <option value="tiff">.tiff (for workflows)</option>
+            <option value="jpeg">.jpeg (for workflows)</option>
         </param>
-        <param type="select" name="output_format" label="Download the result to your Galaxy history or get the URL?">
+        <param type="select" name="output_format" label="Download the result to your Galaxy history or get the URL?" help="Select 'Get URL' to use the result in a workflow.">
             <option value="download">Download</option>
             <option value="getUrl">Get URL</option>
         </param>
@@ -65,6 +61,8 @@
         </test>
     </tests>
     <help><![CDATA[
+        OGC API Process documentation: https://ospd.geolabs.fr:8300/ogc-api/processes/OTB.BandMath.html
+        
         This application performs a mathematical operation on several multi-band images and outputs the result into a monoband image. 
         The given expression is computed at each pixel position. Evaluation of the mathematical formula is done by the muParser libraries.
         The formula can be written using:  * numerical values ( 2.3, -5, 3.1e4, ...)  * variables containing pixel 

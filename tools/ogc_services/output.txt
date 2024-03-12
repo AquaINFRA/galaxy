@@ -1,0 +1,2 @@
+https://ospd.geolabs.fr:8300/temp///MeanShiftSmoothing_0_69e535ba-dfc3-11ee-8aee-0242ac10ee0a.tiff
+https://ospd.geolabs.fr:8300/temp///MeanShiftSmoothing_1_69e535ba-dfc3-11ee-8aee-0242ac10ee0a.tiff

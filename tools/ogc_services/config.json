@@ -1,0 +1,10 @@
+[
+    {
+        "ogc_api": "https://ospd.geolabs.fr:8300/ogc-api/", 
+        "processes": ["*"]
+    },
+    {
+        "ogc_api": "https://ospd.geolabs.fr:8300/ogc-api/", 
+        "processes": ["*"]
+    }
+]

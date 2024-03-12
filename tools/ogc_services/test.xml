@@ -1,0 +1,41 @@
+<tool id="test" name="test" version="1">
+    <description> description </description>
+    <stdio>
+        <exit_code range="1:" />
+    </stdio>
+    <requirements>
+        <requirement type="package" version="version">library</requirement>
+    </requirements>
+    <command><![CDATA[
+        command
+    ]]>
+    </command>
+    <inputs>
+        <param type='select' name='selected_ogc_api' label='Select OGC API'>
+            <option value='https://ospd.geolabs.fr:8300/ogc-api/'>https://ospd.geolabs.fr:8300/ogc-api/</option>
+            <option value='http://ospd.geolabs.fr:8300/ogc-api/'>https://ospd.geolabs.fr:8300/ogc-api/</option>
+        </param>
+    </inputs>
+    <outputs>
+        <data name="output_data" format="png" />
+    </outputs>
+    <tests>
+        <test>
+            <!--<output name="galaxy_output" file="/galaxy/tools/mytools/test_data/test_output.txt"/>-->
+        </test>
+    </tests>
+    <help><![CDATA[
+        help text
+    ]]></help>
+    <citations>
+        <citation type="bibtex">
+            @Manual{,
+                title = {httr2: Perform HTTP Requests and Process the Responses},
+                author = {Hadley Wickham},
+                year = {2023},
+                note = {R package version 0.2.3},
+                url = {https://CRAN.R-project.org/package=httr2},
+            }
+        </citation>
+    </citations>
+</tool>

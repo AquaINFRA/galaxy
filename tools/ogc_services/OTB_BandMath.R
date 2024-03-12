@@ -1,4 +1,4 @@
-#Run with Rscript ./OTB_BandMath.R --file otb_band_math_test_input.txt --processingMemory 256 --mathExpression im1b3,im1b2,im1b1 --outputType png --outputFormat download --outputData otb_band_math_test_output.png
+#Run with Rscript ./OTB_BandMath.R --file otb_band_math_test_input.txt --processingMemory 256 --mathExpression im1b3,im1b2,im1b1 --outputType png --outputFormat download --outputImage float --outputData otb_band_math_test_output.png
 
 library("httr2")
 library("jsonlite")
@@ -7,17 +7,17 @@ library("getopt")
 args <- commandArgs(trailingOnly = TRUE)
 option_specification <- matrix(c(
   'file', 'i1', 1, 'character',
-  'processingMemory', 'i2', 2, 'character',
+  'processingMemory', 'i2', 2, 'integer',
   'mathExpression', 'i3', 2, 'character',
   'outputType', 'i4', 2, 'character',
-  'outputFormat', 'i5', 3, 'character',
-  'outputImage', 'i6', 3, 'character',
-  'outputData', 'o', 2, 'character'
+  'outputFormat', 'i5', 1, 'character',
+  'outputImage', 'i6', 1, 'character',
+  'outputData', 'o', 1, 'character'
 ), byrow = TRUE, ncol = 4)
 options <- getopt(option_specification)
 
 file <- options$file
-processingMemory <- as.numeric(options$processingMemory)
+processingMemory <- options$processingMemory
 mathExpression <-options$mathExpression
 outputType <- paste0("image/", options$outputType)
 outputFormat <- options$outputFormat
@@ -29,7 +29,7 @@ cat("\n ram: ", processingMemory)
 cat("\n exp: ", mathExpression)
 cat("\n outputType: ", outputType)
 cat("\n outputFormat: ", outputFormat)
-cat("\n outputFormat: ", outputImage)
+cat("\n outputImage: ", outputImage)
 
 baseUrl <- "https://ospd.geolabs.fr:8300/ogc-api/"
 execute <- "processes/OTB.BandMath/execution"
@@ -97,7 +97,7 @@ tryCatch({
       #cat("\n", status_code2)
       if (status_code2 == 200) {
         response2 <- makeResponseBodyReadable(resp2$body)
-        #cat("\n", response2$status)
+        cat("\n", response2$status)
         if (response2$status=="successful") {
           status <- "successful"
           #Request 3
@@ -110,6 +110,7 @@ tryCatch({
           if (status_code3 == 200) {
             response3 <- makeResponseBodyReadable(resp3$body)
             if (outputFormat == "download") {
+              options(timeout=300)
               download.file(response3$out$href, destfile = outputData, mode = "wb")              
             } else if (outputFormat == "getUrl") {
               writeLines(response3$out$href, con = outputData)

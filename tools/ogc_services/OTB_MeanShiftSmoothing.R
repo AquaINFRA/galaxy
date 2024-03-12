@@ -1,4 +1,4 @@
-#Run with Rscript ./OTB_MeanShiftSmoothing.R --file otb_band_math_test_input.txt --fOut float --fOutpos float --processingMemory 1024 --spatialR 5 --rangeR 15 --thresHold 0.1 --maxIter 100 --rangeRamp 0 --modeSearch False --outputType png --outputFormat download --outputData1 test1.png --outputData2 test2.png
+#Run with Rscript ./OTB_MeanShiftSmoothing.R --file otb_band_math_test_input.txt --fOut float --fOutpos float --processingMemory 1024 --spatialR 5 --rangeR 15 --thresHold 0.1 --maxIter 100 --rangeRamp 0 --modeSearch False --outputType png --outputFormat download --outputData test1.png
 
 library("httr2")
 library("jsonlite")
@@ -9,24 +9,23 @@ option_specification <- matrix(c(
   'file', 'i1', 1, 'character',
   'fOut', 'i2', 1, 'character',
   'fOutpos', 'i3', 1, 'character',
-  'processingMemory', 'i4', 1, 'character',
-  'spatialR', 'i5', 1, 'character',
-  'rangeR', 'i6', 1, 'character',
-  'thresHold', 'i7', 1, 'character',
-  'maxIter', 'i8', 1, 'character',
-  'rangeRamp', 'i9', 1, 'character',
+  'processingMemory', 'i4', 1, 'integer',
+  'spatialR', 'i5', 2, 'integer',
+  'rangeR', 'i6', 2, 'double',
+  'thresHold', 'i7', 2, 'double',
+  'maxIter', 'i8', 2, 'integer',
+  'rangeRamp', 'i9', 2, 'double',
   'modeSearch', 'i10', 1, 'character',
-  'outputType', 'i11', 2, 'character',
-  'outputFormat', 'i12', 3, 'character',
-  'outputData1', 'o1', 2, 'character',
-  'outputData2', 'o2', 2, 'character'
+  'outputType', 'i11', 1, 'character',
+  'outputFormat', 'i12', 1, 'character',
+  'outputData', 'o', 1, 'character'
 ), byrow = TRUE, ncol = 4)
 options <- getopt(option_specification)
 
 file <- options$file
 fout <- options$fOut
 foutpos <- options$fOutpos
-processingMemory <- as.numeric(options$processingMemory)
+processingMemory <- options$processingMemory
 spatialr <- options$spatialR
 ranger <- options$rangeR
 threshold <- options$thresHold
@@ -35,8 +34,7 @@ rangeramp <- options$rangeRamp
 modesearch <- options$modeSearch
 outputType <- paste0("image/", options$outputType)
 outputFormat <- options$outputFormat
-outputData1 <- options$outputData1
-outputData2 <- options$outputData2
+outputData <- options$outputData
 
 cat("\n file: ", file)
 cat("\n fout: ", fout)
@@ -140,10 +138,11 @@ tryCatch({
           if (status_code3 == 200) {
             response3 <- makeResponseBodyReadable(resp3$body)
             if (outputFormat == "download") {
-              download.file(response3$fout$href, destfile = outputData1, mode = "wb")
-              download.file(response3$fout$href, destfile = outputData2, mode = "wb")              
+              options(timeout=600)
+              download.file(response3$fout$href, destfile = paste0("output1.", options$outputType), mode = "wb")
+              download.file(response3$foutpos$href, destfile = paste0("output2.", options$outputType), mode = "wb")              
             } else if (outputFormat == "getUrl") {
-              writeLines(paste(response3$fout$href, response3$foutpos$href, sep = "\n"), con = outputData1)
+              writeLines(paste(response3$fout$href, response3$foutpos$href, sep = "\n"), con = "output.txt")
             }
           } else if (status_code3 == 404) {
             print("The requested URI was not found.")
