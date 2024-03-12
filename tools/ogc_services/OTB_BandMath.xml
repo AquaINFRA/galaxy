@@ -1,4 +1,4 @@
-<tool id="otb_band_math" name="OTB.BandMath" version="1.0">
+<tool id="otb_band_math" name="OTB.BandMath" version="1.0" profile="22.05">
     <description> outputs a monoband image as a result of a mathematical operation on several multi-band images</description>
     <requirements>
         <requirement type="package" version="4.3.1">r-base</requirement>
