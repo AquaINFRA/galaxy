@@ -1,4 +1,4 @@
-<tool id="otb_band_math" name="OTB.BandMath" version="1.0" ><!--add profile="22.05"-->
+<tool id="otb_band_math" name="OTB.BandMath" version="1.0" profile="22.05">
     <description> outputs a monoband image as a result of a mathematical operation on several multi-band images</description>
     <requirements>
         <requirement type="package" version="4.3.1">r-base</requirement>
@@ -35,7 +35,7 @@
             <option value="tiff">.tiff (for workflows)</option>
             <option value="jpeg">.jpeg (for workflows)</option>
         </param>
-        <param type="select" name="output_format" label="Download the result to your Galaxy history or get the URL?" help="Select 'Get URL' to use the result in a workflow.">
+        <param type="select" name="output_format" label="Download the result to your Galaxy history or get the URL?" help="Select 'Get URL' to use the result as input for another OGC API Process in a workflow.">
             <option value="download">Download</option>
             <option value="getUrl">Get URL</option>
         </param>

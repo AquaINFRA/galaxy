@@ -154,12 +154,12 @@ tryCatch({
         } else if (response2$status=="failed") {
           status <- "failed"
         } 
-         else {
-          attempt <- attempt +1
-          if (attempt == 200) {
-            status <- "failed"          
-          }
-        }        
+         #else {
+         # attempt <- attempt +1
+         # if (attempt == 200) {
+         #   status <- "failed"          
+         # }
+        #}        
       } else {
         status <- "failed"
         print(paste("HTTP", status_code2, "Error:", resp2$status_message))
