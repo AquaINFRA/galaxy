@@ -1,4 +1,4 @@
-<tool id="otb_band_math" name="OTB.BandMath" version="1.0" profile="22.05">
+<tool id="otb_band_math" name="OTB.BandMath" version="1.0">
     <description> outputs a monoband image as a result of a mathematical operation on several multi-band images</description>
     <requirements>
         <requirement type="package" version="4.3.1">r-base</requirement>
@@ -20,7 +20,7 @@
     </command>
     <inputs>
         <param type="data" format="txt" name="file" label="List of images" help="Image-list of operands to the mathematical expression (.txt file, one per line)" />
-        <param type="integer" name="processing_memory" label="Random-Access Memory (RAM)" value="256" optional="true" help="Available memory for processing (in MB)" />
+        <param type="integer" name="processing_memory" label="Random-Access Memory (RAM)" value="256" min="128" max="16384" optional="true" help="Available memory for processing (in MB)" />
         <param type="text" name="math_expression" label="muParser" optional="false" help="The muParser mathematical expression to apply on input images (e.g., 'im1b3,im1b2,im1b1'). See 'Help' for documentation."/>
         <param type="select" name="output_image" label="Output image" help="Output image which is the result of the mathematical expressions on input image-list operands">
             <option value="float">float</option>
@@ -57,7 +57,16 @@
             <param name="output_type" value="png"/>
             <param name="output_image" value="float"/>
             <param name="output_format" value="download"/>
-            <output name="output_data" file="otb_band_math_test_output.png" compare="sim_size" delta_frac="0.1" />
+            <output name="output_data" file="otb_band_math_test1_output.png" compare="sim_size" delta_frac="0.1" />
+        </test>
+        <test>
+            <param name="file" value="otb_band_math_test_input.txt"/>
+            <param name="processing_memory" value="256"/>
+            <param name="math_expression" value="im1b3,im1b2,im1b1"/>
+            <param name="output_type" value="png"/>
+            <param name="output_image" value="float"/>
+            <param name="output_format" value="getUrl"/>
+            <output name="output_data" file="otb_band_math_test2_output.txt" compare="sim_size" delta_frac="0.1" />
         </test>
     </tests>
     <help><![CDATA[
