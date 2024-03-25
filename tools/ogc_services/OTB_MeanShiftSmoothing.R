@@ -128,7 +128,7 @@ tryCatch({
       status_code2 <- resp2$status_code
       if (status_code2 == 200) {
         response2 <- make_response_body_readable(resp2$body)
-        cat("\n", response2$status)
+        cat("\n", response2$status, " ", response2$progress)
         if (response2$status == "successful") {
           status <- "successful"
           # Request 3
