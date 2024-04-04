@@ -1,17 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
 <toolbox monitor="true">
-  <section id="interpolation" name="Interpolation">
-    <tool file="interpolation/filterData.xml"></tool>
-    <tool file="interpolation/createSpatialPointsDataFrame.xml"></tool>
-    <tool file="interpolation/createSpatialPolygonsDataFrame.xml"></tool>
-    <tool file="interpolation/alignBoundingBoxes.xml"></tool>
-    <tool file="interpolation/plotStudyArea.xml"></tool>
-    <tool file="interpolation/run_idw_interpolation.xml"></tool>
-    <tool file="interpolation/compareFigures.xml"></tool>
-  </section>
   <section name="OGC Services" id="ogc_service">
     <tool file="ogc_services/OTB_BandMath.xml" />
     <tool file="ogc_services/OTB_MeanShiftSmoothing.xml" />
+    <tool file="ogc_services/generic.xml" />
   </section>
   <section id="getext" name="Get Data">
     <tool file="data_source/aquainfra_ddas.xml" />
