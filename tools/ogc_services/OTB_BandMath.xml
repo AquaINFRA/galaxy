@@ -1,35 +1,41 @@
-<tool id="otb_band_math" name="OTB.BandMath" version="0.1.0">
-    <description> outputs a monoband image as a result of a mathematical operation on several multi-band images.</description>
-    <stdio>
-        <exit_code range="1:" />
-    </stdio>
+<tool id="otb_band_math" name="OTB.BandMath" version="1.0" profile="22.05">
+    <description> outputs a monoband image as a result of a mathematical operation on several multi-band images</description>
     <requirements>
-        <requirement type="package" version="4.1.2">R</requirement>
-        <requirement type="package" version="0.2.3">httr2</requirement>
-        <requirement type="package" version="1.2.0">getopt</requirement>
-        <requirement type="package" version="1.8.7">jsonlite</requirement>
+        <requirement type="package" version="4.3.1">r-base</requirement>
+        <requirement type="package" version="1.20.4">r-getopt</requirement>
+        <requirement type="package" version="0.2.3">r-httr2</requirement>
+        <requirement type="package" version="1.8.7">r-jsonlite</requirement>
     </requirements>
-    <command><![CDATA[
-        Rscript $__tool_directory__/OTB_BandMath.R --file $file --processingMemory $processing_memory --mathExpression $math_expression --outputType $output_type --outputFormat $output_format --outputData $output_data    
-    ]]>
+    <command detect_errors='exit_code'>
+        <![CDATA[
+            Rscript '$__tool_directory__/OTB_BandMath.R' 
+                --file '$file' 
+                --processingMemory '$processing_memory' 
+                --mathExpression '$math_expression'
+                --outputImage '$output_image' 
+                --outputType '$output_type' 
+                --outputFormat '$output_format' 
+                --outputData '$output_data'    
+        ]]>
     </command>
     <inputs>
-        <param type="data" format="txt" name="file" label="txt" />
-        <!--<param type="text" name="url" label="URL to a .tif file" optional="false" help="Use, for example, https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/31/U/ET/2019/4/S2B_31UET_20190421_0_L2A/TCI.tif">
-            <validator type="regex" message="Input is not a proper URL">^(http|https):\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,}(\/\S*)?$</validator>
-        </param>-->
-        <param type="select" name="processing_memory" label="Available memory for processing (in MB)">
-            <option value="256">256</option>
-            <option value="512">512</option> <!--how to make it integer?-->
-            <option value="1024">1024</option>
+        <param type="data" format="txt" name="file" label="List of images" help="Image-list of operands to the mathematical expression (.txt file, one per line)" />
+        <param type="integer" name="processing_memory" label="Random-Access Memory (RAM)" value="256" min="128" max="16384" optional="true" help="Available memory for processing (in MB)" />
+        <param type="text" name="math_expression" label="muParser" optional="false" help="The muParser mathematical expression to apply on input images (e.g., 'im1b3,im1b2,im1b1'). See 'Help' for documentation."/>
+        <param type="select" name="output_image" label="Output image" help="Output image which is the result of the mathematical expressions on input image-list operands">
+            <option value="float">float</option>
+            <option value="uint8">uint8</option>
+            <option value="uint16">uint16</option>
+            <option value="int16">int16</option>
+            <option value="int32">int32</option>
+            <option value="double">double</option>
         </param>
-        <param type="text" name="math_expression" label="The muParser mathematical expression to apply on input images" optional="false" help="Use, for example, im1b3,im1b2,im1b1"/>
-        <param type="select" name="output_type" label="Output format of the image">
-            <option value="png">.png</option>
-            <option value="tiff">.tiff</option>
-            <option value="jpeg">.jpeg</option>
+        <param type="select" name="output_type" label="Output image format" help="Select .png for obtaining the response as an OGC web service. Select .tiff or .jpeg for using it in a workflow.">
+            <option value="png">.png (for OGC web services)</option>
+            <option value="tiff">.tiff (for workflows)</option>
+            <option value="jpeg">.jpeg (for workflows)</option>
         </param>
-        <param type="select" name="output_format" label="Do you want to download the result to your Galaxy history or get the URL?">
+        <param type="select" name="output_format" label="Download the result to your Galaxy history or get the URL?" help="Select 'Get URL' to use the result as input for another OGC API Process in a workflow.">
             <option value="download">Download</option>
             <option value="getUrl">Get URL</option>
         </param>
@@ -45,21 +51,42 @@
     </outputs>
     <tests>
         <test>
-            <!--<output name="galaxy_output" file="/galaxy/tools/mytools/test_data/test_output.txt"/>-->
+            <param name="file" value="otb_band_math_test_input.txt"/>
+            <param name="processing_memory" value="256"/>
+            <param name="math_expression" value="im1b3,im1b2,im1b1"/>
+            <param name="output_type" value="png"/>
+            <param name="output_image" value="float"/>
+            <param name="output_format" value="download"/>
+            <output name="output_data" file="otb_band_math_test1_output.png" compare="sim_size" delta_frac="0.1" />
+        </test>
+        <test>
+            <param name="file" value="otb_band_math_test_input.txt"/>
+            <param name="processing_memory" value="256"/>
+            <param name="math_expression" value="im1b3,im1b2,im1b1"/>
+            <param name="output_type" value="png"/>
+            <param name="output_image" value="float"/>
+            <param name="output_format" value="getUrl"/>
+            <output name="output_data" file="otb_band_math_test2_output.txt" compare="sim_size" delta_frac="0.1" />
         </test>
     </tests>
     <help><![CDATA[
-        This application performs a mathematical operation on several multi-band images and outputs the result into a monoband image. The given expression is computed at each pixel position. Evaluation of the mathematical formula is done by the muParser libraries.The formula can be written using:  * numerical values ( 2.3, -5, 3.1e4, ...)  * variables containing pixel values (e.g. : 'im2b3' is the pixel value in 2nd image, 3rd band)  * binary operators:    * '+' addition, '-' subtraction, '*' multiplication, '/' division    * '^' raise x to the power of y    * '.
+        OGC API Process documentation: https://ospd.geolabs.fr:8300/ogc-api/processes/OTB.BandMath.html
+        
+        This application performs a mathematical operation on several multi-band images and outputs the result into a monoband image. 
+        The given expression is computed at each pixel position. Evaluation of the mathematical formula is done by the muParser libraries.
+        The formula can be written using:  * numerical values ( 2.3, -5, 3.1e4, ...)  * variables containing pixel 
+        values (e.g. : 'im2b3' is the pixel value in 2nd image, 3rd band)  * binary operators:    * '+' addition, '-' subtraction, '*' multiplication, '/' division    * '^' raise x to the power of y    * '.
     ]]></help>
     <citations>
         <citation type="bibtex">
-            @Manual{,
+            @Manual{httr2,
                 title = {httr2: Perform HTTP Requests and Process the Responses},
                 author = {Hadley Wickham},
                 year = {2023},
-                note = {R package version 0.2.3},
-                url = {https://CRAN.R-project.org/package=httr2},
+                note = {R package version 1.0.0, https://github.com/r-lib/httr2},
+                url = {https://httr2.r-lib.org},
             }
         </citation>
+        <citation type="doi">10.48550/arXiv.1403.2805</citation>
     </citations>
 </tool>
