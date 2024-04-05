@@ -10,12 +10,17 @@
 		<requirement type="package" version="1.8.7">jsonlite</requirement>
 	</requirements>
 	<command><![CDATA[
-    Rscript '$__tool_directory__/generic.R'
+	#if $conditional_server.select_process == "OTB.MeanShiftSmoothing":
+		echo "hey"
+	#elif $conditional_server.select_process == "OTB.BandMath":
+		echo "ho"
+	#end if
+    Rscript '$__tool_directory__/generic_meanshift.R'
 		--server '$select_server'
         --process '$select_process'
         --input '$in'
 		--fout '$fout'
-		--foutpos '$foutpos' 
+		--foutpos '$foutpos'
 		--ram '$ram'
 		--spatialr '$spatialr'
 		--ranger '$ranger'
@@ -37,6 +42,25 @@
 					<param name="select_process" type="select" label="Select process">
 						<option value="OTB.MeanShiftSmoothing">OTB.MeanShiftSmoothing: This application smooths an image using the MeanShift algorithm.</option>
 						<option value="OTB.BundleToPerfectSensor">OTB.BundleToPerfectSensor: Perform P+XS pansharpening</option>
+						<option value="OTB.ConvertCartoToGeoPoint">OTB.ConvertCartoToGeoPoint: Convert cartographic coordinates to geographic ones.</option>
+						<option value="OTB.VectorDataTransform">OTB.VectorDataTransform: Apply a transform to each vertex of the input VectorData</option>
+						<option value="OTB.FusionOfClassifications">OTB.FusionOfClassifications: Fuses several classifications maps of the same image on the basis of class labels.</option>
+						<option value="OTB.VectorDataSetField">OTB.VectorDataSetField: Set a field in vector data.</option>
+						<option value="OTB.Pansharpening">OTB.Pansharpening: Perform P+XS pansharpening</option>
+						<option value="OTB.ConcatenateVectorData">OTB.ConcatenateVectorData: Concatenate vector data files</option>
+						<option value="OTB.GridBasedImageResampling">OTB.GridBasedImageResampling: Resamples an image according to a resampling grid</option>
+						<option value="OTB.SARPolarSynth">OTB.SARPolarSynth: Gives, for each pixel, the power that would have been received by a SAR system with a basis different from the classical (H,V) one (polarimetric synthetis).</option>
+						<option value="OTB.GrayScaleMorphologicalOperation">OTB.GrayScaleMorphologicalOperation: Performs morphological operations on a grayscale input image</option>
+						<option value="OTB.ReadImageInfo">OTB.ReadImageInfo: Get information about the image</option>
+						<option value="OTB.ImageEnvelope">OTB.ImageEnvelope: Extracts an image envelope.</option>
+						<option value="OTB.LSMSVectorization">OTB.LSMSVectorization: This application performs the fourth step of the exact Large-Scale Mean-Shift segmentation workflow [1].</option>
+						<option value="OTB.FineRegistration">OTB.FineRegistration: Estimate disparity map between two images.</option>
+						<option value="OTB.GenerateRPCSensorModel">OTB.GenerateRPCSensorModel: Generate a RPC sensor model from a list of Ground Control Points.</option>
+						<option value="OTB.DomainTransform">OTB.DomainTransform: Domain Transform application for wavelet and fourier</option>
+						<option value="OTB.RefineSensorModel">OTB.RefineSensorModel: Perform least-square fit of a sensor model to a set of tie points</option>
+						<option value="OTB.ComputeImagesStatistics">OTB.ComputeImagesStatistics: Computes global mean and standard deviation for each band from a set of images and optionally saves the results in an XML file.</option>
+						<option value="OTB.Rasterization">OTB.Rasterization: Rasterize a vector dataset.</option>
+						<option value="OTB.BandMath">OTB.BandMath: Outputs a monoband image which is the result of a mathematical operation on several multi-band images.</option>
 					</param>
 					<when value="OTB.MeanShiftSmoothing">
 						<param name="in" label="in" help="The input image can be any single or multiband image. Beware of pontential imbalance between bands ranges as it may alter euclidean distance." type="text" />
@@ -113,6 +137,450 @@
 						<param name="interpolator.bco.radius" label="interpolator.bco.radius" optional="true" value="0" help="Fill value for area outside the reprojected image" type="float" />
 						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer" />
 						<param type="select" name="out_out" label="out" help="Output image.">
+							<option value="image/tiff">image/tiff</option>
+							<option value="image/jpeg">image/jpeg</option>
+							<option value="image/png">image/png</option>
+						</param>
+					</when>
+					<when value="OTB.ConvertCartoToGeoPoint">
+						<param name="carto.x" label="carto.x" help="X cartographic coordinates in the projection defined by mapproj parameter" type="float" />
+						<param name="carto.y" label="carto.y" help="Y cartographic coordinates in the projection defined by mapproj parameter" type="float" />
+						<param name="mapproj" label="mapproj" value="utm" help="Defines the map projection to be used." type="select">
+							<option value="utm">utm</option>
+							<option value="lambert2">lambert2</option>
+							<option value="lambert93">lambert93</option>
+							<option value="wgs">wgs</option>
+							<option value="epsg">epsg</option>
+						</param>
+						<param name="mapproj.utm.zone" label="mapproj.utm.zone" value="31" help="The zone number ranges from 1 to 60 and allows defining the transverse mercator projection (along with the hemisphere)" type="integer" />
+						<param name="mapproj.utm.northhem" label="mapproj.utm.northhem" value="False" help="The transverse mercator projections are defined by their zone number as well as the hemisphere. Activate this parameter if your image is in the northern hemisphere." type="boolean" truevalue="True" falsevalue="False" />
+						<param name="mapproj.epsg.code" label="mapproj.epsg.code" value="4326" help="See www.spatialreference.org to find which EPSG code is associated to your projection" type="integer" />
+					</when>
+					<when value="OTB.VectorDataTransform">
+						<param name="vd" label="vd" help="Input vector data file to transform" type="text" />
+						<param name="in" label="in" help="Image defining the reference coordinate system in which the transform is applied. Both projected and sensor images are supported." type="text" />
+						<param name="transform.tx" label="transform.tx" value="0" help="Translation in the X direction (in pixels)" type="float" />
+						<param name="transform.ty" label="transform.ty" value="0" help="Translation in the Y direction (in pixels)" type="float" />
+						<param name="transform.ro" label="transform.ro" value="0" help="Angle of the rotation (in degrees)" type="float" />
+						<param name="transform.centerx" label="transform.centerx" value="0" help="X coordinate of the rotation and scaling center (in physical units)" type="float" />
+						<param name="transform.centery" label="transform.centery" value="0" help="Y coordinate of the rotation and scaling center (in physical units)" type="float" />
+						<param name="transform.scale" label="transform.scale" value="1" help="The scale coefficient to apply" type="float" />
+						<param type="select" name="out_out" label="out" help="Output vector data with ">
+							<option value="text/xml">text/xml</option>
+							<option value="application/vnd.google-earth.kml+xml">application/vnd.google-earth.kml+xml</option>
+							<option value="application/json">application/json</option>
+							<option value="application/zip">application/zip</option>
+						</param>
+					</when>
+					<when value="OTB.FusionOfClassifications">
+						<param name="il" label="il" help="List of input classification maps to fuse. Labels in each classification image must represent the same class." type="text" />
+						<param name="method" label="method" value="majorityvoting" help="Selection of the fusion method and its parameters." type="select">
+							<option value="majorityvoting">majorityvoting</option>
+							<option value="dempstershafer">dempstershafer</option>
+						</param>
+						<param name="method.dempstershafer.cmfl" label="method.dempstershafer.cmfl" value="precision" help="Type of confusion matrix measurement used to compute the masses of belief of each classifier." type="select">
+							<option value="precision">precision</option>
+							<option value="recall">recall</option>
+							<option value="accuracy">accuracy</option>
+							<option value="kappa">kappa</option>
+						</param>
+						<param name="nodatalabel" label="nodatalabel" value="0" help="Label for the NoData class. Such input pixels keep their NoData label in the output image and are not handled in the fusion process. By default, 'nodatalabel = 0'." type="integer" />
+						<param name="undecidedlabel" label="undecidedlabel" value="0" help="Label for the Undecided class. Pixels with more than 1 fused class are marked as Undecided. Please note that the Undecided value must be different from existing labels in the input classifications. By default, 'undecidedlabel = 0'." type="integer" />
+						<param name="out" label="out" value="uint8" help="The output classification image resulting from the fusion of the input classification images." type="select">
+							<option value="uint8">uint8</option>
+							<option value="uint16">uint16</option>
+							<option value="int16">int16</option>
+							<option value="int32">int32</option>
+							<option value="int32">int32</option>
+							<option value="float">float</option>
+							<option value="double">double</option>
+						</param>
+						<param type="select" name="out_out" label="out" help="The output classification image resulting from the fusion of the input classification images.">
+							<option value="image/tiff">image/tiff</option>
+							<option value="image/jpeg">image/jpeg</option>
+							<option value="image/png">image/png</option>
+						</param>
+					</when>
+					<when value="OTB.VectorDataSetField">
+						<param name="in" label="in" help="Input Vector Data" type="text" />
+						<param name="fn" label="fn" help="Field name" type="text" />
+						<param name="fv" label="fv" help="Field value" type="text" />
+						<param type="select" name="out_out" label="out" help="Output Vector Data">
+							<option value="text/xml">text/xml</option>
+							<option value="application/vnd.google-earth.kml+xml">application/vnd.google-earth.kml+xml</option>
+							<option value="application/json">application/json</option>
+							<option value="application/zip">application/zip</option>
+						</param>
+					</when>
+					<when value="OTB.Pansharpening">
+						<param name="inp" label="inp" help="Input panchromatic image." type="text" />
+						<param name="inxs" label="inxs" help="Input XS image." type="text" />
+						<param name="out" label="out" value="float" help="Output image." type="select">
+							<option value="uint8">uint8</option>
+							<option value="uint16">uint16</option>
+							<option value="int16">int16</option>
+							<option value="int32">int32</option>
+							<option value="int32">int32</option>
+							<option value="float">float</option>
+							<option value="double">double</option>
+						</param>
+						<param name="method" label="method" value="rcs" help="Selection of the pan-sharpening method." type="select">
+							<option value="rcs">rcs</option>
+							<option value="lmvm">lmvm</option>
+							<option value="bayes">bayes</option>
+						</param>
+						<param name="method.lmvm.radiusx" label="method.lmvm.radiusx" value="3" help="Set the x radius of the sliding window." type="integer" />
+						<param name="method.lmvm.radiusy" label="method.lmvm.radiusy" value="3" help="Set the y radius of the sliding window." type="integer" />
+						<param name="method.bayes.lambda" label="method.bayes.lambda" value="0.9999" help="Set the weighting value." type="float" />
+						<param name="method.bayes.s" label="method.bayes.s" value="1" help="Set the S coefficient." type="float" />
+						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer" />
+						<param type="select" name="out_out" label="out" help="Output image.">
+							<option value="image/tiff">image/tiff</option>
+							<option value="image/jpeg">image/jpeg</option>
+							<option value="image/png">image/png</option>
+						</param>
+					</when>
+					<when value="OTB.ConcatenateVectorData">
+						<param name="vd" label="vd" help="Vector data files to be concatenated." type="text" />
+						<param type="select" name="out_out" label="out" help="Output conctenated vector data file.">
+							<option value="text/xml">text/xml</option>
+							<option value="application/vnd.google-earth.kml+xml">application/vnd.google-earth.kml+xml</option>
+							<option value="application/json">application/json</option>
+							<option value="application/zip">application/zip</option>
+						</param>
+					</when>
+					<when value="OTB.GridBasedImageResampling">
+						<param name="io.in" label="io.in" help="The input image to resample" type="text" />
+						<param name="io.out" label="io.out" value="float" help="The resampled output image" type="select">
+							<option value="uint8">uint8</option>
+							<option value="uint16">uint16</option>
+							<option value="int16">int16</option>
+							<option value="int32">int32</option>
+							<option value="int32">int32</option>
+							<option value="float">float</option>
+							<option value="double">double</option>
+						</param>
+						<param name="grid.in" label="grid.in" help="The resampling grid" type="text" />
+						<param name="grid.type" label="grid.type" value="def" help="allows one to choose between two grid types" type="select">
+							<option value="def">def</option>
+							<option value="loc">loc</option>
+						</param>
+						<param name="out.ulx" label="out.ulx" value="0" help="X Coordinate of the upper-left pixel of the output resampled image" type="float" />
+						<param name="out.uly" label="out.uly" value="0" help="Y Coordinate of the upper-left pixel of the output resampled image" type="float" />
+						<param name="out.sizex" label="out.sizex" help="Size of the output resampled image along X (in pixels)" type="integer" />
+						<param name="out.sizey" label="out.sizey" help="Size of the output resampled image along Y (in pixels)" type="integer" />
+						<param name="out.spacingx" label="out.spacingx" value="1" help="Size of each pixel along X axis" type="float" />
+						<param name="out.spacingy" label="out.spacingy" value="1" help="Size of each pixel along Y axis" type="float" />
+						<param name="out.default" label="out.default" value="0" help="The default value to give to pixel that falls outside of the input image." type="float" />
+						<param name="interpolator" label="interpolator" value="bco" help="This group of parameters allows one to define how the input image will be interpolated during resampling." type="select">
+							<option value="nn">nn</option>
+							<option value="linear">linear</option>
+							<option value="bco">bco</option>
+						</param>
+						<param name="interpolator.bco.radius" label="interpolator.bco.radius" optional="true" value="128" help="Available memory for processing (in MB)" type="integer" />
+						<param type="select" name="io.out_out" label="io.out" help="The resampled output image">
+							<option value="image/tiff">image/tiff</option>
+							<option value="image/jpeg">image/jpeg</option>
+							<option value="image/png">image/png</option>
+						</param>
+					</when>
+					<when value="OTB.SARPolarSynth">
+						<param name="in" label="in" help="Input image." type="text" />
+						<param name="out" label="out" value="float" help="Output image." type="select">
+							<option value="uint8">uint8</option>
+							<option value="uint16">uint16</option>
+							<option value="int16">int16</option>
+							<option value="int32">int32</option>
+							<option value="int32">int32</option>
+							<option value="float">float</option>
+							<option value="double">double</option>
+						</param>
+						<param name="psii" label="psii" value="0" help="Orientation (transmitting antenna)" type="float" />
+						<param name="khii" label="khii" value="0" help="Ellipticity (transmitting antenna)" type="float" />
+						<param name="psir" label="psir" value="0" help="Orientation (receiving antenna)" type="float" />
+						<param name="khir" label="khir" value="0" help="Ellipticity (receiving antenna)" type="float" />
+						<param name="emissionh" label="emissionh" optional="true" value="0" help="This parameter is useful in determining the polarization architecture (dual polarization case)." type="integer" />
+						<param name="emissionv" label="emissionv" optional="true" value="0" help="This parameter is useful in determining the polarization architecture (dual polarization case)." type="integer" />
+						<param name="mode" label="mode" value="none" help="mode" type="select">
+							<option value="none">none</option>
+							<option value="co">co</option>
+							<option value="cross">cross</option>
+						</param>
+						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer" />
+						<param type="select" name="out_out" label="out" help="Output image.">
+							<option value="image/tiff">image/tiff</option>
+							<option value="image/jpeg">image/jpeg</option>
+							<option value="image/png">image/png</option>
+						</param>
+					</when>
+					<when value="OTB.GrayScaleMorphologicalOperation">
+						<param name="in" label="in" help="The input image to be filtered." type="text" />
+						<param name="out" label="out" value="float" help="Output image containing the filtered output image." type="select">
+							<option value="uint8">uint8</option>
+							<option value="uint16">uint16</option>
+							<option value="int16">int16</option>
+							<option value="int32">int32</option>
+							<option value="int32">int32</option>
+							<option value="float">float</option>
+							<option value="double">double</option>
+						</param>
+						<param name="channel" label="channel" value="1" help="The selected channel index" type="integer" />
+						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer" />
+						<param name="structype" label="structype" value="ball" help="Choice of the structuring element type" type="select">
+							<option value="ball">ball</option>
+							<option value="cross">cross</option>
+						</param>
+						<param name="structype.ball.xradius" label="structype.ball.xradius" value="5" help="The Structuring Element X Radius" type="integer" />
+						<param name="structype.ball.yradius" label="structype.ball.yradius" value="5" help="The Structuring Element Y Radius" type="integer" />
+						<param name="filter" label="filter" value="dilate" help="Choice of the morphological operation" type="select">
+							<option value="dilate">dilate</option>
+							<option value="erode">erode</option>
+							<option value="opening">opening</option>
+							<option value="closing">closing</option>
+						</param>
+						<param type="select" name="out_out" label="out" help="Output image containing the filtered output image.">
+							<option value="image/tiff">image/tiff</option>
+							<option value="image/jpeg">image/jpeg</option>
+							<option value="image/png">image/png</option>
+						</param>
+					</when>
+					<when value="OTB.ReadImageInfo">
+						<param name="in" label="in" help="Input image to analyse" type="text" />
+						<param name="keywordlist" label="keywordlist" value="False" help="Output the OSSIM keyword list. It contains metadata information (sensor model, geometry ). Information is stored in keyword list (pairs of key/value)" type="boolean" truevalue="True" falsevalue="False" />
+						<param type="select" name="outkwl_out" label="outkwl" help="This option allows extracting the OSSIM keywordlist of the image into a geom file.">
+							<option value="text/xml">text/xml</option>
+							<option value="text/plain">text/plain</option>
+						</param>
+					</when>
+					<when value="OTB.ImageEnvelope">
+						<param name="in" label="in" help="Input image filename." type="text" />
+						<param name="sr" label="sr" optional="true" value="0" help="Sampling rate for image edges (in pixel)." type="integer" />
+						<param name="elev.dem" label="elev.dem" optional="true" help="This parameter allows selecting a directory containing Digital Elevation Model files. Note that this directory should contain only DEM files. Unexpected behaviour might occurs if other images are found in this directory." type="text" />
+						<param name="elev.geoid" label="elev.geoid" help="Use a geoid grid to get the height above the ellipsoid in case there is no DEM available, no coverage for some points or pixels with no_data in the DEM tiles. A version of the geoid can be found on the OTB website(https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-data/blob/master/Input/DEM/egm96.grd)." type="text" />
+						<param name="elev.default" label="elev.default" value="0" help="This parameter allows setting the default height above ellipsoid when there is no DEM available, no coverage for some points or pixels with no_data in the DEM tiles, and no geoid file has been set. This is also used by some application as an average elevation value." type="float" />
+						<param name="proj" label="proj" optional="true" help="Projection to be used to compute the envelope (default is WGS84)" type="text" />
+						<param type="select" name="out_out" label="out" help="Vector data file containing the envelope.">
+							<option value="text/xml">text/xml</option>
+							<option value="application/vnd.google-earth.kml+xml">application/vnd.google-earth.kml+xml</option>
+							<option value="application/json">application/json</option>
+							<option value="application/zip">application/zip</option>
+						</param>
+					</when>
+					<when value="OTB.LSMSVectorization">
+						<param name="in" label="in" help="The input image, containing initial spectral signatures corresponding to the segmented image (inseg)." type="text" />
+						<param name="inseg" label="inseg" help="Segmented image where each pixel value is the unique integer label of the segment it belongs to." type="text" />
+						<param name="tilesizex" label="tilesizex" value="500" help="Size of tiles along the X-axis for tile-wise processing." type="integer" />
+						<param name="tilesizey" label="tilesizey" value="500" help="Size of tiles along the Y-axis for tile-wise processing." type="integer" />
+						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer" />
+						<param type="select" name="out_out" label="out" help="The output GIS vector file, representing the vectorized version of the segmented image where the features of the polygons are the radiometric means and variances.">
+							<option value="text/xml">text/xml</option>
+							<option value="application/vnd.google-earth.kml+xml">application/vnd.google-earth.kml+xml</option>
+							<option value="application/json">application/json</option>
+							<option value="application/zip">application/zip</option>
+						</param>
+					</when>
+					<when value="OTB.FineRegistration">
+						<param name="ref" label="ref" help="The reference image." type="text" />
+						<param name="sec" label="sec" help="The secondary image." type="text" />
+						<param name="out" label="out" value="float" help="The output image contains 3 bands, for X offset, Y offset and the metric value. It may contain a 4th one with the validity mask (if used)." type="select">
+							<option value="uint8">uint8</option>
+							<option value="uint16">uint16</option>
+							<option value="int16">int16</option>
+							<option value="int32">int32</option>
+							<option value="int32">int32</option>
+							<option value="float">float</option>
+							<option value="double">double</option>
+						</param>
+						<param name="erx" label="erx" help="The exploration radius along x (in pixels)" type="integer" />
+						<param name="ery" label="ery" help="The exploration radius along y (in pixels)" type="integer" />
+						<param name="mrx" label="mrx" help="Radius along x (in pixels) of the metric computation window" type="integer" />
+						<param name="mry" label="mry" help="Radius along y (in pixels) of the metric computation window" type="integer" />
+						<param name="w" label="w" help="The image to warp after disparity estimation is completed." type="text" />
+						<param name="wo" label="wo" optional="true" value="float" help="The output warped image" type="select">
+							<option value="uint8">uint8</option>
+							<option value="uint16">uint16</option>
+							<option value="int16">int16</option>
+							<option value="int32">int32</option>
+							<option value="int32">int32</option>
+							<option value="float">float</option>
+							<option value="double">double</option>
+						</param>
+						<param name="cox" label="cox" optional="true" value="0" help="Coarse offset along x (in physical space) between the two images, used as an initial offset for all pixels." type="float" />
+						<param name="coy" label="coy" optional="true" value="0" help="Coarse offset along y (in physical space) between the two images, used as an initial offset for all pixels." type="float" />
+						<param name="ssrx" label="ssrx" optional="true" value="1" help="Generates a result at a coarser resolution with a given sub-sampling rate along X" type="float" />
+						<param name="ssry" label="ssry" optional="true" value="1" help="Generates a result at a coarser resolution with a given sub-sampling rate along Y" type="float" />
+						<param name="rgsx" label="rgsx" optional="true" help="Performs a gaussian smoothing of the reference image. Parameter is gaussian sigma (in pixels) in X direction." type="float" />
+						<param name="rgsy" label="rgsy" optional="true" help="Performs a gaussian smoothing of the reference image. Parameter is gaussian sigma (in pixels) in Y direction." type="float" />
+						<param name="sgsx" label="sgsx" optional="true" help="Performs a gaussian smoothing of the secondary image. Parameter is gaussian sigma (in pixels) in X direction." type="float" />
+						<param name="sgsy" label="sgsy" optional="true" help="Performs a gaussian smoothing of the secondary image. Parameter is gaussian sigma (in pixels) in Y direction." type="float" />
+						<param name="m" label="m" optional="true" help="Choose the metric used for block matching. Available metrics are cross-correlation (CC), cross-correlation with subtracted mean (CCSM), mean-square difference (MSD), mean reciprocal square difference (MRSD) and mutual information (MI). Default is cross-correlation" type="text" />
+						<param name="spa" label="spa" optional="true" value="0.01" help="Metric extrema location will be refined up to the given accuracy. Default is 0.01" type="float" />
+						<param name="cva" label="cva" optional="true" value="0.01" help="Metric extrema will be refined up to the given accuracy. Default is 0.01" type="float" />
+						<param name="vmlt" label="vmlt" optional="true" help="Lower threshold to compute the validity mask. This mask will be the 4th output band." type="float" />
+						<param name="vmut" label="vmut" optional="true" help="Upper threshold to obtain a validity mask. This mask will be the 4th output band." type="float" />
+						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer" />
+						<param type="select" name="out_out" label="out" help="The output image contains 3 bands, for X offset, Y offset and the metric value. It may contain a 4th one with the validity mask (if used).">
+							<option value="image/tiff">image/tiff</option>
+							<option value="image/jpeg">image/jpeg</option>
+							<option value="image/png">image/png</option>
+						</param>
+						<param type="select" name="wo_out" label="wo" help="The output warped image">
+							<option value="image/tiff">image/tiff</option>
+							<option value="image/jpeg">image/jpeg</option>
+							<option value="image/png">image/png</option>
+						</param>
+					</when>
+					<when value="OTB.GenerateRPCSensorModel">
+						<param name="inpoints" label="inpoints" help="Input file containing tie points. Points are stored in following format: col row lon lat. Spaced by a space or tab character. Line beginning with # are ignored." type="text" />
+						<param name="map" label="map" value="utm" help="Defines the map projection to be used." type="select">
+							<option value="utm">utm</option>
+							<option value="lambert2">lambert2</option>
+							<option value="lambert93">lambert93</option>
+							<option value="wgs">wgs</option>
+							<option value="epsg">epsg</option>
+						</param>
+						<param name="map.utm.zone" label="map.utm.zone" value="31" help="The zone number ranges from 1 to 60 and allows defining the transverse mercator projection (along with the hemisphere)" type="integer" />
+						<param name="map.utm.northhem" label="map.utm.northhem" value="False" help="The transverse mercator projections are defined by their zone number as well as the hemisphere. Activate this parameter if your image is in the northern hemisphere." type="boolean" truevalue="True" falsevalue="False" />
+						<param name="map.epsg.code" label="map.epsg.code" value="4326" help="See www.spatialreference.org to find which EPSG code is associated to your projection" type="integer" />
+						<param name="elev.dem" label="elev.dem" optional="true" help="This parameter allows selecting a directory containing Digital Elevation Model files. Note that this directory should contain only DEM files. Unexpected behaviour might occurs if other images are found in this directory." type="text" />
+						<param name="elev.geoid" label="elev.geoid" help="Use a geoid grid to get the height above the ellipsoid in case there is no DEM available, no coverage for some points or pixels with no_data in the DEM tiles. A version of the geoid can be found on the OTB website(https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-data/blob/master/Input/DEM/egm96.grd)." type="text" />
+						<param name="elev.default" label="elev.default" value="0" help="This parameter allows setting the default height above ellipsoid when there is no DEM available, no coverage for some points or pixels with no_data in the DEM tiles, and no geoid file has been set. This is also used by some application as an average elevation value." type="float" />
+						<param type="select" name="outgeom_out" label="outgeom" help="Geom file containing the generated RPC sensor model">
+							<option value="text/xml">text/xml</option>
+							<option value="text/plain">text/plain</option>
+						</param>
+						<param type="select" name="outstat_out" label="outstat" help="Output file containing the following info: ref_lon ref_lat elevation predicted_lon predicted_lat x_error_ref(meters) y_error_ref(meters) global_error_ref(meters) x_error(meters) y_error(meters) overall_error(meters)">
+							<option value="text/xml">text/xml</option>
+							<option value="text/plain">text/plain</option>
+						</param>
+						<param type="select" name="outvector_out" label="outvector" help="File containing segments representing residues">
+							<option value="text/xml">text/xml</option>
+							<option value="text/plain">text/plain</option>
+						</param>
+					</when>
+					<when value="OTB.DomainTransform">
+						<param name="in" label="in" help="This will take an input image to be transformed image. For FFT inverse transform, it expects a complex image as two-band image in which first band represent real part and second band represent imaginary part." type="text" />
+						<param name="out" label="out" value="float" help="This parameter holds the output file name to which transformed image will be written. This has a slightly different behaviour depending on transform type.  For Wavelet, output is a single band image for both forward and inverse transform.  For FFT forward transform, output is two band image where first band represents real part and second band represents imaginary part of a complex image." type="select">
+							<option value="uint8">uint8</option>
+							<option value="uint16">uint16</option>
+							<option value="int16">int16</option>
+							<option value="int32">int32</option>
+							<option value="int32">int32</option>
+							<option value="float">float</option>
+							<option value="double">double</option>
+						</param>
+						<param name="mode" label="mode" value="wavelet" help="This parameter allows one to select between fft(fourier) and wavelet" type="select">
+							<option value="fft">fft</option>
+							<option value="wavelet">wavelet</option>
+						</param>
+						<param name="mode.fft.shift" label="mode.fft.shift" value="False" help="Shift transform of fft filter" type="boolean" truevalue="True" falsevalue="False" />
+						<param name="mode.wavelet.form" label="mode.wavelet.form" value="haar" help="mode.wavelet.form" type="select">
+							<option value="haar">haar</option>
+							<option value="db4">db4</option>
+							<option value="db6">db6</option>
+							<option value="db8">db8</option>
+							<option value="db12">db12</option>
+							<option value="db20">db20</option>
+							<option value="sb24">sb24</option>
+							<option value="sb44">sb44</option>
+							<option value="sym8">sym8</option>
+						</param>
+						<param name="mode.wavelet.nlevels" label="mode.wavelet.nlevels" value="2" help="Number of decomposition levels" type="integer" />
+						<param name="direction" label="direction" value="forward" help="direction" type="select">
+							<option value="forward">forward</option>
+							<option value="inverse">inverse</option>
+						</param>
+						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer" />
+						<param type="select" name="out_out" label="out" help="This parameter holds the output file name to which transformed image will be written. This has a slightly different behaviour depending on transform type.  For Wavelet, output is a single band image for both forward and inverse transform.  For FFT forward transform, output is two band image where first band represents real part and second band represents imaginary part of a complex image.">
+							<option value="image/tiff">image/tiff</option>
+							<option value="image/jpeg">image/jpeg</option>
+							<option value="image/png">image/png</option>
+						</param>
+					</when>
+					<when value="OTB.RefineSensorModel">
+						<param name="ingeom" label="ingeom" help="Geom file containing the sensor model to refine" type="text" />
+						<param name="inpoints" label="inpoints" help="Input file containing tie points. Points are stored in following format: row col lon lat. Line beginning with # are ignored." type="text" />
+						<param name="map" label="map" value="utm" help="Defines the map projection to be used." type="select">
+							<option value="utm">utm</option>
+							<option value="lambert2">lambert2</option>
+							<option value="lambert93">lambert93</option>
+							<option value="wgs">wgs</option>
+							<option value="epsg">epsg</option>
+						</param>
+						<param name="map.utm.zone" label="map.utm.zone" value="31" help="The zone number ranges from 1 to 60 and allows defining the transverse mercator projection (along with the hemisphere)" type="integer" />
+						<param name="map.utm.northhem" label="map.utm.northhem" value="False" help="The transverse mercator projections are defined by their zone number as well as the hemisphere. Activate this parameter if your image is in the northern hemisphere." type="boolean" truevalue="True" falsevalue="False" />
+						<param name="map.epsg.code" label="map.epsg.code" value="4326" help="See www.spatialreference.org to find which EPSG code is associated to your projection" type="integer" />
+						<param name="elev.dem" label="elev.dem" optional="true" help="This parameter allows selecting a directory containing Digital Elevation Model files. Note that this directory should contain only DEM files. Unexpected behaviour might occurs if other images are found in this directory." type="text" />
+						<param name="elev.geoid" label="elev.geoid" help="Use a geoid grid to get the height above the ellipsoid in case there is no DEM available, no coverage for some points or pixels with no_data in the DEM tiles. A version of the geoid can be found on the OTB website(https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb-data/blob/master/Input/DEM/egm96.grd)." type="text" />
+						<param name="elev.default" label="elev.default" value="0" help="This parameter allows setting the default height above ellipsoid when there is no DEM available, no coverage for some points or pixels with no_data in the DEM tiles, and no geoid file has been set. This is also used by some application as an average elevation value." type="float" />
+						<param type="select" name="outgeom_out" label="outgeom" help="Geom file containing the refined sensor model">
+							<option value="text/xml">text/xml</option>
+							<option value="text/plain">text/plain</option>
+						</param>
+						<param type="select" name="outstat_out" label="outstat" help="Output file containing the following info: ref_lon ref_lat elevation predicted_lon predicted_lat x_error_ref(meters) y_error_ref(meters) global_error_ref(meters) x_error(meters) y_error(meters) overall_error(meters)">
+							<option value="text/xml">text/xml</option>
+							<option value="text/plain">text/plain</option>
+						</param>
+						<param type="select" name="outvector_out" label="outvector" help="File containing segments representing residues">
+							<option value="text/xml">text/xml</option>
+							<option value="text/plain">text/plain</option>
+						</param>
+					</when>
+					<when value="OTB.ComputeImagesStatistics">
+						<param name="il" label="il" help="List of input image filenames." type="text" />
+						<param name="bv" label="bv" optional="true" help="Background value to ignore in computation of statistics." type="float" />
+						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer" />
+						<param type="select" name="out_out" label="out" help="XML filename where the statistics are saved for future reuse.">
+							<option value="text/xml">text/xml</option>
+						</param>
+					</when>
+					<when value="OTB.Rasterization">
+						<param name="in" label="in" help="The input vector dataset to be rasterized" type="text" />
+						<param name="out" label="out" value="float" help="An output image containing the rasterized vector dataset" type="select">
+							<option value="uint8">uint8</option>
+							<option value="uint16">uint16</option>
+							<option value="int16">int16</option>
+							<option value="int32">int32</option>
+							<option value="int32">int32</option>
+							<option value="float">float</option>
+							<option value="double">double</option>
+						</param>
+						<param name="im" label="im" help="A reference image from which to import output grid and projection reference system information." type="text" />
+						<param name="szx" label="szx" optional="true" help="Output size along x axis (useless if support image is given)" type="integer" />
+						<param name="szy" label="szy" optional="true" help="Output size along y axis (useless if support image is given)" type="integer" />
+						<param name="epsg" label="epsg" optional="true" help="EPSG code for the output projection reference system (EPSG 4326 for WGS84, 32631 for UTM31N...,useless if support image is given)" type="integer" />
+						<param name="orx" label="orx" optional="true" help="Output upper-left corner x coordinate (useless if support image is given)" type="float" />
+						<param name="ory" label="ory" optional="true" help="Output upper-left corner y coordinate (useless if support image is given)" type="float" />
+						<param name="spx" label="spx" optional="true" help="Spacing (ground sampling distance) along x axis (useless if support image is given)" type="float" />
+						<param name="spy" label="spy" optional="true" help="Spacing (ground sampling distance) along y axis (useless if support image is given)" type="float" />
+						<param name="background" label="background" value="0" help="Default value for pixels not belonging to any geometry" type="float" />
+						<param name="mode" label="mode" value="binary" help="Choice of rasterization modes" type="select">
+							<option value="binary">binary</option>
+							<option value="attribute">attribute</option>
+						</param>
+						<param name="mode.binary.foreground" label="mode.binary.foreground" value="255" help="Value for pixels inside a geometry" type="float" />
+						<param name="mode.attribute.field" label="mode.attribute.field" value="DN" help="Name of the attribute field to burn" type="text" />
+						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer" />
+						<param type="select" name="out_out" label="out" help="An output image containing the rasterized vector dataset">
+							<option value="image/tiff">image/tiff</option>
+							<option value="image/jpeg">image/jpeg</option>
+							<option value="image/png">image/png</option>
+						</param>
+					</when>
+					<when value="OTB.BandMath">
+						<param name="il" label="il" help="Image-list of operands to the mathematical expression." type="text" />
+						<param name="out" label="out" value="float" help="Output image which is the result of the mathematical expressions on input image-list operands." type="select">
+							<option value="uint8">uint8</option>
+							<option value="uint16">uint16</option>
+							<option value="int16">int16</option>
+							<option value="int32">int32</option>
+							<option value="int32">int32</option>
+							<option value="float">float</option>
+							<option value="double">double</option>
+						</param>
+						<param name="ram" label="ram" optional="true" value="128" help="Available memory for processing (in MB)" type="integer" />
+						<param name="exp" label="exp" help="The muParser mathematical expression to apply on input images." type="text" />
+						<param type="select" name="out_out" label="out" help="Output image which is the result of the mathematical expressions on input image-list operands.">
 							<option value="image/tiff">image/tiff</option>
 							<option value="image/jpeg">image/jpeg</option>
 							<option value="image/png">image/png</option>
