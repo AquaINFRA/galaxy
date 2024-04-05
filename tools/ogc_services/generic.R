@@ -11,69 +11,78 @@ library("getopt")
 
 args <- commandArgs(trailingOnly = TRUE)
 option_specification <- matrix(c(
-  "file", "i1", 1, "character",
-  "fOut", "i2", 1, "character",
-  "fOutpos", "i3", 1, "character",
-  "processingMemory", "i4", 1, "integer",
-  "spatialR", "i5", 2, "integer",
-  "rangeR", "i6", 2, "double",
-  "thresHold", "i7", 2, "double",
-  "maxIter", "i8", 2, "integer",
-  "rangeRamp", "i9", 2, "double",
-  "modeSearch", "i10", 1, "character",
-  "outputType", "i11", 1, "character",
-  "outputFormat", "i12", 1, "character",
-  "outputData", "o", 1, "character"
+  "input", "i1", 1, "character",
+  "fout", "i2", 1, "character",
+  "foutpos", "i3", 1, "character",
+  "ram", "i4", 1, "integer",
+  "spatialr", "i5", 2, "integer",
+  "ranger", "i6", 2, "double",
+  "thres", "i7", 2, "double",
+  "maxiter", "i8", 2, "integer",
+  "rangeramp", "i9", 2, "double",
+  "modesearch", "i10", 1, "character",
+  "fout_out", "i11", 1, "character",
+  "foutpos_out", "i12", 1, "character",
+  "server", "i13", 1, "character",
+  "process", "i14", 1, "character",
+  "output_data", "o", 1, "character"
 ), byrow = TRUE, ncol = 4)
 options <- getopt(option_specification)
 
-file <- options$file
-fout <- options$fOut
-foutpos <- options$fOutpos
-processing_memory <- options$processingMemory
-spatialr <- options$spatialR
-ranger <- options$rangeR
-threshold <- options$thresHold
-maxiter <- options$maxIter
-rangeramp <- options$rangeRamp
-modesearch <- options$modeSearch
-output_type <- paste0("image/", options$outputType)
-output_format <- options$outputFormat
-output_data <- options$outputData
+input <- options$input
+fout <- options$fout
+foutpos <- options$foutpos
+ram <- options$ram
+spatialr <- options$spatialr
+ranger <- options$ranger
+thres <- options$thres
+maxiter <- options$maxiter
+rangeramp <- options$rangeramp
+modesearch <- options$modesearch
+fout_out <- options$fout_out
+foutpos_out <- options$foutpos_out
+server <- options$server
+process <- options$process
+output_data <- options$output_data
+output_format <- "getUrl"
 
-cat("\n file: ", file)
+cat("\n file: ", input)
 cat("\n fout: ", fout)
 cat("\n foutpos: ", foutpos)
-cat("\n processing_memory: ", processing_memory)
+cat("\n processing_memory: ", ram)
 cat("\n spatialr: ", spatialr)
 cat("\n ranger: ", ranger)
-cat("\n threshold: ", threshold)
+cat("\n threshold: ", thres)
 cat("\n maxiter: ", maxiter)
 cat("\n rangeramp: ", rangeramp)
 cat("\n modesearch: ", modesearch)
-cat("\n output_type: ", output_type)
-cat("\n output_format: ", output_format)
+cat("\n fout_out: ", fout_out)
+cat("\n foutpos_out: ", foutpos_out)
+cat("\n server: ", server)
+cat("\n process: ", process)
 
-base_url <- "https://ospd.geolabs.fr:8300/ogc-api/"
-execute <- "processes/OTB.MeanShiftSmoothing/execution"
+base_url <- server
+execute <- paste0("processes/", process, "/execution")
 get_status <- "jobs/"
 get_result <- "/results"
 
-file_urls <- readLines(file, warn = FALSE)
+#file_urls <- readLines(file, warn = FALSE)
 
-il_list <- lapply(file_urls, function(url) {
-  list("href" = url)
-})
+#il_list <- lapply(file_urls, function(url) {
+#  list("href" = url)
+#})
 
 json_data <- list(
   "inputs" = list(
-    "in" = il_list,
+    "in" = list(
+      "href" = input
+    ),
     "fout" = fout,
     "foutpos" = foutpos,
-    "ram" = processing_memory,
+    "ram" = ram,
     "spatialr" = spatialr,
     "ranger" = ranger,
-    "thres" = threshold,
+    "thres" = thres,
     "maxiter" = maxiter,
     "rangeramp" = rangeramp,
     "modesearch" = modesearch
@@ -81,13 +90,13 @@ json_data <- list(
   "outputs" = list(
     "fout" = list(
       "format" = list(
-        "mediaType" = output_type
+        "mediaType" = fout_out
       ),
       "transmissionMode" = "reference"
     ),
     "foutpos" = list(
       "format" = list(
-        "mediaType" = output_type
+        "mediaType" = foutpos_out
       ),
       "transmissionMode" = "reference"
     )
