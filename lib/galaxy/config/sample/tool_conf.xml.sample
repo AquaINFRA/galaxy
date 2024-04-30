@@ -1,8 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <toolbox monitor="true">
   <section name="OGC Services" id="ogc_service">
-    <tool file="ogc_services/OTB_BandMath.xml" />
-    <tool file="ogc_services/OTB_MeanShiftSmoothing.xml" />
     <tool file="ogc_services/generic.xml" />
   </section>
   <section id="getext" name="Get Data">
