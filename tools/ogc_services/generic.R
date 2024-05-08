@@ -98,8 +98,6 @@ getResult <- function (server, jobID) {
 }
 
 retrieveResults <- function(server, jobID, outputData) {
-    print("outputData")
-    print(outputData)
     status_code <- getStatusCode(server, jobID)
     if(status_code == 200){
         status <- "running"
@@ -113,12 +111,8 @@ retrieveResults <- function(server, jobID, outputData) {
                   resultBody <- parseResponseBody(result$body)
                   urls <- unname(unlist(lapply(resultBody, function(x) x$href)))
                   urls_with_newline <- paste(urls, collapse = "\n")
-                  
                   con <- file(outputData, "w")
                   writeLines(urls_with_newline, con = con)
-                  #sink(paste0(outputData, "_result_urls.txt"))
-                  #  cat(urls_with_newline, "\n")
-                  #sink()
                   close(con)
                 }
             } else if (jobStatus == "failed") {
