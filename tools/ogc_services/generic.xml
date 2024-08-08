@@ -1,5 +1,5 @@
-<tool id="aquaInfra_ogc_api_processes" name="AquaINFRA OGC API Processes" version="0.1.0">
-	<description>AquaINFRA</description>
+<tool id="aquaInfra_ogc_api_processes" name="AquaINFRA services" version="0.1.0">
+	<description>deployed as OGC API Processes</description>
 	<macros>
 		<import>macros.xml</import>
 	</macros>
@@ -15,23 +15,12 @@
 	<inputs>
 		<conditional name="conditional_process">
 			<param name="select_process" type="select" label="Select process">
-				<option value="hello-world">hello-world: Hello World</option>
-				<option value="test-process-r">test-process-r: test-process-r</option>
 				<option value="points-att-polygon">points-att-polygon: points-att-polygon</option>
 				<option value="peri-conv">peri-conv: peri-conv</option>
 				<option value="mean-by-group">mean-by-group: mean-by-group</option>
 				<option value="ts-selection-interpolation">ts-selection-interpolation: ts-selection-interpolation</option>
 				<option value="trend-analysis-mk">trend-analysis-mk: trend-analysis-mk</option>
 			</param>
-			<when value="hello-world">
-				<param name="name" label="Name" optional="false" help="The name of the person or entity that you wish tobe echoed back as an output" type="text"/>
-				<param name="message" label="Message" optional="true" help="An optional message to echo as well" type="text"/>
-			</when>
-			<when value="test-process-r">
-				<param name="text1" label="text 1" optional="true" help="text 1TODO" type="text"/>
-				<param name="text2" label="text 2" optional="true" help="text 2 TODO" type="text"/>
-				<param name="text3" label="text3" optional="true" help="text 3 TODO" type="text"/>
-			</when>
 			<when value="points-att-polygon">
 				<param name="regions" label="regions" optional="false" help="astra" type="data" format="txt"/>
 				<param name="points" label="points" optional="false" help="astra" type="data" format="txt"/>
