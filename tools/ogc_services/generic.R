@@ -93,7 +93,7 @@ executeProcess <- function(url, process, requestBodyData, cookie) {
   
   body <- list()
   body$inputs <- requestBodyData$inputs
-  print(body$inputs)
+  #print(body$inputs)
   body$mode <- "async"
   body$response <- "document"
   #print(body$inputs)
@@ -220,15 +220,16 @@ for (key in names(inputParameters)) {
     con <- file(inputParameters[[key]], "r")
     lines <- readLines(con)
     print("--------------------------------------------------------------------1")
+    print(length(lines))
     close(con)
-    if (endsWith(lines, ".jp2") && startsWith(lines, "https")) {
+    if (!length(lines) > 1 && endsWith(lines, ".jp2") && startsWith(lines, "https")) {
       print("--------------------------------------------------------------------2")
       tmp <- list()
       tmp$href <- lines
       tmp$type <- "image/jp2"
       inputParameters[[key]] <- tmp
     }
-    else if (endsWith(lines, ".SAFE") && startsWith(lines, "s3:")) {
+    else if (!length(lines) > 1 && endsWith(lines, ".SAFE") && startsWith(lines, "s3:")) {
       print("--------------------------------------------------------------------3")
       json_string <- paste(lines, collapse = "\n")
       inputParameters[[key]] <- json_string
