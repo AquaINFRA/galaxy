@@ -245,13 +245,13 @@ for (key in names(inputParameters)) {
       print("--------------------------------------------------------------------3")
       json_string <- paste(lines, collapse = "\n")
       inputParameters[[key]] <- json_string
-    } else if (!length(lines) > 1 && (endsWith(lines, ".xlsx") || endsWith(lines, ".csv")) && startsWith(lines, "https")) {
-      print("--------------------------------------------------------------------3")
+    } else if (!length(lines) > 1 && (endsWith(lines, ".xlsx") || endsWith(lines, ".csv") || grepl("f=csv", lines)) && startsWith(lines, "https")) {
+      print("--------------------------------------------------------------------4")
       json_string <- paste(lines, collapse = "\n")
       inputParameters[[key]] <- json_string
     } else if (inputParameters$select_process == "plot-image" ||
                inputParameters$select_process == "reproject-image") {
-      print("--------------------------------------------------------------------4")
+      print("--------------------------------------------------------------------5")
       tmp <- list()
       tmp$href <- lines
       tmp$type <- "image/tiff; application=geotiff"
@@ -260,7 +260,7 @@ for (key in names(inputParameters)) {
       }
       inputParameters[[key]] <- tmp
     } else {
-      print("-----------------------------------5")
+      print("-----------------------------------6")
       json_string <- paste(lines, collapse = "\n")
       json_data <- fromJSON(json_string)
       inputParameters[[key]] <- json_data
@@ -278,7 +278,7 @@ for (key in names(inputParameters)) {
       if (type == "integer") {
         value <- as.integer(value)
       } else if (type == "numeric") {
-        value <- as.numeric(balue)
+        value <- as.numeric(value)
       } else if (type == "character") {
         value <- as.character(value)
       }
