@@ -1,5 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
 <toolbox monitor="true">
+  <section id="aquainfra_tools" name="AquaINFRA tools">
+    <tool file="aquaInfra_OgcApiProcesses/aquaInfra_OgcApiProcesses.xml" />
+  </section>
   <section id="getext" name="Get Data">
     <tool file="data_source/diced.xml" />
     <tool file="data_source/upload.xml" />
