@@ -6,6 +6,8 @@ scripts/scramble/build
 scripts/scramble/lib
 scripts/scramble/archives
 
+planemo
+
 # Python virtualenv
 .venv*/
 

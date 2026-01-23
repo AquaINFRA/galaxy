@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <toolbox monitor="true">
   <section id="aquainfra_tools" name="AquaINFRA tools">
-    <tool file="aquaInfra_OgcApiProcesses/aquaInfra_OgcApiProcesses.xml" />
+    <tool file="aquaInfra_OgcApiProcesses/aquainfra_ogc_api_processes.xml" />
   </section>
   <section id="getext" name="Get Data">
     <tool file="data_source/diced.xml" />
