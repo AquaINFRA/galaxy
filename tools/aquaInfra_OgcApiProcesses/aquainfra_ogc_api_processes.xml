@@ -339,13 +339,11 @@
                 <param name="study_area_layer" label="Study area layer" optional="true" help="If Waterbodies is specified as geojson, layer name to plot is required." type="text"/>
             </when>
             <when value="netcdf-extract-fb-data">
-                <param name="url_thredds" label="Source" optional="false" value="" help="THREDDS URL to the NetCDF dataset (e.g. https://thredds.niva.no/thredds/dodsC/datasets/nrt/color_fantasy.nc)." type="text">
-                    <validator type="empty_field" message="You must provide a value."/>
-                </param>
+                <param name="url_thredds" label="Source" optional="false" help="THREDDS URL to the NetCDF dataset (e.g. https://thredds.niva.no/thredds/dodsC/datasets/nrt/color_fantasy.nc). (URL must be stored in a .txt file)" type="data" format="txt"/>
                 <param name="parameters_array" label="Parameters" optional="true" help="Comma-separated list of parameters to extract (e.g. temperature,salinity,chlorophyll,turbidity). Use NULL (or omit) to extract all available parameters." type="text"/>
                 <param name="start_date" label="Start date" optional="true" help="Start date (YYYY-MM-DD). If provided, end date must also be provided. Use NULL to omit." type="text"/>
                 <param name="end_date" label="End date" optional="true" help="End date (YYYY-MM-DD). If provided, start date must also be provided. Use NULL to omit." type="text"/>
-                <param name="study_area_bbox" label="Boundary box" optional="true" help="Optional bounding box filter. Order: [lat_min, lon_min, lat_max, lon_max]. Example: {'bbox': [58.5, 9.5, 59.9, 11.9]}. Omit to use the full dataset extent." type="text"/>
+                <param name="study_area_bbox_object" label="Boundary box" optional="true" help="Optional bounding box filter. Order: [lat_min, lon_min, lat_max, lon_max]. Example: {'bbox': [58.5, 9.5, 59.9, 11.9]}. Omit to use the full dataset extent." type="text"/>
             </when>
             <when value="netcdf-join-dataframes">
                 <param name="url_input_ferrybox_csv" label="FerryBox dataframe CSV" optional="false" help="URL to FerryBox dataframe CSV file. (URL must be stored in a .txt file)" type="data" format="txt"/>
@@ -389,9 +387,7 @@
                 <param name="study_area_layer" label="Study area layer" optional="true" help="Input of specific layer geometries if multiple are available in input waterbody file." type="text"/>
             </when>
             <when value="netcdf-scatter-plot">
-                <param name="url_input_csv" label="Source" optional="false" value="" help="Path to input URL containing at least datetime, parameter, value, and preferably latitude/longitude." type="text">
-                    <validator type="empty_field" message="You must provide a value."/>
-                </param>
+                <param name="url_input_csv" label="Source" optional="false" help="Path to input URL containing at least datetime, parameter, value, and preferably latitude/longitude. (URL must be stored in a .txt file)" type="data" format="txt"/>
                 <param name="param1" label="x-axis paramater" optional="false" value="" help="Parameter name for x-axis (e.g. salinity)." type="text">
                     <validator type="empty_field" message="You must provide a value."/>
                 </param>
@@ -400,9 +396,7 @@
                 </param>
             </when>
             <when value="netcdf-tile-plot">
-                <param name="url_input_csv" label="Input FerryBox data" optional="false" value="" help="Path or URL to FerryBox CSV containing datetime, latitude, longitude, parameter and value." type="text">
-                    <validator type="empty_field" message="You must provide a value."/>
-                </param>
+                <param name="url_input_csv" label="Input FerryBox data" optional="false" help="Path or URL to FerryBox CSV containing datetime, latitude, longitude, parameter and value. (URL must be stored in a .txt file)" type="data" format="txt"/>
                 <param name="start_date" label="Start date" optional="true" help="Optional start date (YYYY-MM-DD). Use null or omit for no filter." type="text"/>
                 <param name="end_date" label="End date" optional="true" help="Optional end date (YYYY-MM-DD). Use null or omit for no filter." type="text"/>
                 <param name="parameters_array" label="Parameters" optional="true" help="Optional list of parameters to plot. If omitted or empty, all available parameters are used." type="text"/>
