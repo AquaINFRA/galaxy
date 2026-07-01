@@ -219,7 +219,7 @@ for (key in names(inputParameters)) {
 
       for (value in value_list) {
         value <- as.character(value)
-        value <- gsub(" ", "", value)
+        value <- trimws(value)
         #if(type == "integer") {
         #  value <- as.integer(value)
         #} else if (type == "numeric") {
