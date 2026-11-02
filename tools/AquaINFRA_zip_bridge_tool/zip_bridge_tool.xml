@@ -1,5 +1,14 @@
-<tool id="zip_bridge_tool" name="Create Zipped File Link" version="1.0.0" profile="25.1">
-    <description>Generates a dynamic link to a renamed and zipped file</description>
+<tool id="zip_bridge_tool" name="Create Zipped File Link" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" profile="25.1">
+    <description>
+        Generates a dynamic link to a renamed and zipped file
+    </description>
+    <macros>
+        <token name="@TOOL_VERSION@">1.0.0</token>
+        <token name="@VERSION_SUFFIX@">1</token>
+    </macros>
+    <creator>
+        <organization name="EOSC AquaINFRA" url="https://aquainfra.eu/"/>
+    </creator>
     <command><![CDATA[
         printf '%s' "https://zip-bridge-worker.galiana.workers.dev/?url=${original_url}&name=${new_filename}" > '$output_url'
     ]]></command>
