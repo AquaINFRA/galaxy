@@ -4,8 +4,8 @@
         printf '%s' "https://zip-bridge-worker.galiana.workers.dev/?url=${original_url}&name=${new_filename}" > '$output_url'
     ]]></command>
     <inputs>
-        <param name="original_url" type="text" label="Original File URL" help="Paste the URL from the upstream tool." />
-        <param name="new_filename" type="text" label="Desired Filename in ZIP" value="Tordera.txt" help="The name the file will have inside the ZIP archive." />
+        <param name="original_url" type="text" optional="false" label="Original File URL" help="Paste the URL from the upstream tool." />
+        <param name="new_filename" type="text" optional="false" label="Desired Filename in ZIP" value="Tordera.txt" help="The name the file will have inside the ZIP archive." />
     </inputs>
     <outputs>
         <data name="output_url" format="txt" label="Dynamic ZIP URL" />
